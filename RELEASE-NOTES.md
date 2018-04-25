@@ -1,10 +1,10 @@
 # Riak KV 2.2.5 Release Notes
 #### This release is dedicated to the memory of Andy Gross. Thank you and RIP.
 
-This is the first full community release of Riak, post-Basho's
-collapse into bankruptcy. A lot has happened. bet365 bought Basho's
+This is the first full community release of Riak since Basho, Riak's original creator, ceased business operations.
+A lot has happened to help bring us to this point; bet365 bought Basho's
 assets and donated the code to the community. They kept the Basho
-website running, the documents site, the mailing list (after tiot.jp
+website running, the documents site and the mailing list (after tiot.jp
 initially mirrored the docs in the interim.) They did a huge amount to
 provide continuity to the community.
 
@@ -13,30 +13,21 @@ funding from NHS Digital, who depend on Riak for Spine II, and other
 critical services. Thanks also to ESL, tiot.jp, and all the other
 individuals and organizations involved.
 
-This release of Riak is based on the last known-good release of Riak,
-riak-2.2.3. There is good work in the `develop` branches of many Basho
-repos, but since much of it was unfinished, unreleased, untested, or
+This release of Riak KV is based on the last known-good release, `riak-2.2.3`. There is good work in the `develop` branches of many Basho
+repos, but as much of it was unfinished, unreleased, untested, or
 just status-unknown, we decided as a community to go forward based on
-riak-2.2.3.
+`riak-2.2.3`.
 
-This is the first release with open source multi-data-centre
-replication. The rest of the changes are fixes (riak-core claim,
+This is the first release with Open Source Multi-Data-Centre
+replication (MDC). Other changes include fixes to Riak (riak-core claim,
 repl), new features (gsets, participate in coverage, node-confirms),
 and fixes to tests and the build/development process.
 
-### Known Issues
+## Upgrading
 
-#### Advanced.config changes
+If you are upgrading from previous 2.2.x, 2.1.x or 2.0.x Open Source releases of Riak KV, you will need to add default MDC configuration to the *riak_core* section of your `advanced.config` file even if you have no plans to use MDC functionality. **Failure to make this addition will prevent Riak KV 2.2.5 from starting correctly.**
 
-With the inclusion of Multi-Datacentre Replication in riak-2.2.5 there
-are additional `advanced.config` parameters. If you have an existing
-`advanced.config` you must merge it with the new one from the install
-of riak-2.2.5. Some package installs will simply replace the old with
-new (e.g. .deb), others may leave the old file unchanged. YOU MUST
-make sure that the `advanced.config` contains valid `riak_repl`
-entries.
-
-Example default entries to add to your existing advanced.config:
+Example `advanced.config` default settings sample:
 
 ```
 {riak_core,
@@ -63,7 +54,7 @@ Read more about configuring
 [MDC](http://docs.basho.com/riak/kv/2.2.3/configuring/v3-multi-datacenter/)
 replication.
 
-More details about the issue can be found in riak\_repl/782: [2.2.5 - \[enoent\] - riak_repl couldn't create log dir
+More details about the issue that results if you fail to follow the upgrade procedure can be found in riak\_repl/782: [2.2.5 - \[enoent\] - riak_repl couldn't create log dir
 "data/riak_repl/logs"](https://github.com/basho/riak/issues/940)
 
 ### Changes in this release

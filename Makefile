@@ -85,6 +85,10 @@ rel-deb: compile
 	$(REBAR) as deb release
 	cp -a _build/deb/rel/riak rel/
 
+rel-fbsdng: compile
+	$(REBAR) as fbsdng release
+	cp -a _build/fbsdng/rel/riak rel/
+
 relclean:
 	rm -rf $(REL_DIR)
 	rm -rf rel/riak

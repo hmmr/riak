@@ -248,7 +248,7 @@ if [ 0 -eq $(( $get_cfgs + $get_logs + $get_patches + $get_riakcmds + $get_yzcmd
     get_logs=1
     get_patches=1
     get_riakcmds=1
-    get_yzcmds=1
+    get_yzcmds=0
     get_syscmds=1
     get_extracmds=0
 fi

@@ -32,6 +32,9 @@ function write_pid_file {  # relx doesn't seem to write the pid file, does it?
     while [[ $c -ne 0 ]]; do
 	if [ "`maybe_su ${RELX_RIAK} ping`" = "pong" ]; then
 	    maybe_su ${RELX_RIAK} pid >$PID_DIR/riak.pid
+            # systemd wants it to be owned by root, so:
+	    chown root:root $PID_DIR/riak.pid 2&>1 >/dev/null \
+                || true  # but, if we are run as non-root, just never mind
 	    break
 	fi
 	sleep 2

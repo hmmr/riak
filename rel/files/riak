@@ -68,6 +68,10 @@ case "$1" in
 	shift
 	maybe_su `which riak-admin` $*
 	;;
+    chkconfig)
+	shift
+	maybe_su `which riak-chkconfig` $*
+	;;
     repl)
 	shift
 	maybe_su `which riak-repl` $*

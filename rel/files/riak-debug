@@ -154,7 +154,7 @@ verbose_output=0
 
 ## Use riak config generate to set $riak_app_config and
 ## $riak_vm_args
-gen_result=`"$riak_bin_dir"/riak chkconfig | grep -v "OK" | cut -d' ' -f 2,4`
+gen_result=`"$riak_bin_dir"/riak chkconfig | grep -v "OK"`
 riak_app_config=`echo $gen_result | cut -d' ' -f 1`
 generated_config_dir=`dirname "$riak_app_config"`
 riak_vm_args=`echo $gen_result | cut -d' ' -f 2`
@@ -304,6 +304,13 @@ if [ 0 -ne $(( $get_cfgs + $get_logs + $get_patches + $get_riakcmds + $get_yzcmd
         fi
     fi
 fi
+
+# Make a flat, easily searchable version of the app.config settings
+riak_epaths=`make_app_epaths "${riak_app_config}"`
+# run it now, before any other `riak cmd` (each such call invokes
+# cuttlefish, which generates a new (and totally identical) app and
+# vm.args config file in platform_gen_dir, eventually rotating the one
+# we have just found)
 
 
 if [ -f "${riak_vm_args}" ]; then
@@ -473,7 +480,7 @@ if [ 1 -eq $get_riakcmds ]; then
     # nodes in a cluster.
 
     dump riak_ping "$riak_sbin_dir"/riak ping
-    dump riak_version "$riak_sbin_dir"/riak versions
+    dump riak_version "$riak_sbin_dir"/riak admin version
     dump riak_member_status "$riak_sbin_dir"/riak admin member-status
     dump riak_ring_status "$riak_sbin_dir"/riak admin ring-status
     dump riak_status "$riak_sbin_dir"/riak admin status
@@ -483,9 +490,6 @@ if [ 1 -eq $get_riakcmds ]; then
     dump riak_repl_connections "$riak_sbin_dir"/riak repl connections
     dump riak_repl_clusterstats "$riak_sbin_dir"/riak repl clusterstats
     dump riak_repl_modes "$riak_sbin_dir"/riak repl modes
-
-    # Make a flat, easily searchable version of the app.config settings
-    riak_epaths=`make_app_epaths "${riak_app_config}"`
 
     # If Yokozuna is not installed, $yz_test will be null.
     yz_test="`epath 'yokozuna root_dir' "$riak_epaths" | sed -e 's/^\"//' -e 's/\".*$//'`"

@@ -7,7 +7,7 @@ COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' {{platform_etc_dir}}/riak
 NODE={{node}}
 HOST=${NODE#*@}
 
-BOOT_FILE="{{runner_base_dir}}/releases/{{rel_vsn}}/start_clean"
+BOOT_FILE="{{runner_base_dir}}/releases/{{release_version}}/start_clean"
 
 CONFIG_PATH=`ls -1r {{platform_gen_dir}}/generated.conf/app.*.config | head -n1`
 VMARGS_PATH=`ls -1r {{platform_gen_dir}}/generated.conf/vm.*.args | head -n1`

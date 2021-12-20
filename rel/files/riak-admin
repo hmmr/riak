@@ -12,7 +12,7 @@ COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' {{platform_etc_dir}}/riak
 NODE={{node}}
 HOST=${NODE#*@}
 
-BOOT_FILE="{{runner_base_dir}}/releases/{{rel_vsn}}/start_clean"
+BOOT_FILE="{{runner_base_dir}}/releases/{{release_version}}/start_clean"
 
 usage() {
     echo "Usage: $SCRIPT { cluster | join | leave | backup | restore | test | "

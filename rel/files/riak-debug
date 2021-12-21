@@ -136,10 +136,10 @@ exit
 ###
 
 # These paths may be overridden with environment variables.
-RUNNER_BASE_DIR={{runner_base_dir}}
-riak_base_dir={{runner_base_dir}}
-riak_bin_dir={{runner_script_dir}}
-riak_etc_dir={{runner_etc_dir}}
+RUNNER_BASE_DIR=$(cd `dirname $0` && /bin/pwd -P)/..
+riak_base_dir=$RUNNER_BASE_DIR
+riak_bin_dir={{platform_script_dir}}
+riak_etc_dir={{platform_etc_dir}}
 riak_sbin_dir=/usr/sbin
 
 get_cfgs=0

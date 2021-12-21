@@ -7,7 +7,7 @@ SCRIPT="riak-admin"
 
 RPC_HOP="{{platform_bin_dir}}/riak rpc"
 
-ERTS_PATH="{{runner_base_dir}}/`(cd {{runner_base_dir}} && ls -d erts-*)`/bin"
+ERTS_PATH="{{platform_base_dir}}/`(cd {{platform_base_dir}} && ls -d erts-*)`/bin"
 COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' {{platform_etc_dir}}/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
 NODE={{node}}
 HOST=${NODE#*@}

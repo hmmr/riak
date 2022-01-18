@@ -1,13 +1,13 @@
-Source: riak
+Source: riak-ts
 Section: net
 Priority: extra
-Maintainer: packaging <packaging@riak.com>
+Maintainer: packaging <packaging@tiot.jp
 Build-Depends: debhelper (>= 7), libpam0g-dev
 Standards-Version: 3.9.3
-Homepage: riak.com
+Homepage: tiot.jp
 
-Package: riak
+Package: riak-ts
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, adduser, logrotate, sudo
-Homepage: riak.com
-Description: Riak KV Database
+Homepage: tiot.jp
+Description: Riak TS Database

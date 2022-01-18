@@ -1,17 +1,13 @@
 _build/
-_checkouts/
-deps/*
 rel/riak
 rel/vars/dev*_vars.config
 dev/
 perfdev/
 ebin/
 apps/riak/.eunit
-apps/riak/.rebar
 _build
 .DS_Store
 rel/vars/*_vars.config
 riak.png
 log/*
-rebar3.crashdump
 .eunit

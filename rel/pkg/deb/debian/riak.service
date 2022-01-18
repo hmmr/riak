@@ -1,12 +1,12 @@
 [Unit]
-Description=Riak KV Database
+Description=Riak TS Database
 
 [Service]
-User=riak
+User=riak_ts
 ExecStart=/usr/sbin/riak start
 ExecStop=/usr/sbin/riak stop
 Type=forking
-PIDFile=/run/riak/riak.pid
+PIDFile=/run/riak.pid
 EnvironmentFile=-/etc/default/riak
 RuntimeDirectory=riak
 

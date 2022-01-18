@@ -42,7 +42,7 @@ CODE=" try
 $ERTS_PATH/erl -noshell -noinput \
                -pa $PLATFORM_PATCH_DIR \
                -boot $BOOT_FILE \
-               -hidden -name riak_chkconfig$RAND@$HOST -setcookie $COOKIE \
+               -hidden -name riak_ts_chkconfig$RAND@$HOST -setcookie $COOKIE \
                -node $NODE  -tracing off \
                -eval "$CODE"
 

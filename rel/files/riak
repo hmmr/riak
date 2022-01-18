@@ -6,21 +6,21 @@ export PID_DIR={{pid_dir}}
 export PIPE_DIR={{pipe_dir}}/   # terminating / (relx treats it as a prefix)
 
 mkdir -p $PID_DIR $PIPE_DIR
-chown riak:riak $PID_DIR $PIPE_DIR
+chown riak_ts:riak_ts $PID_DIR $PIPE_DIR
 
 function write_pid_file {  # relx doesn't seem to write the pid file, does it?
     local c=3
     sleep 1
     while [[ $c -ne 0 ]]; do
-	if [ "`maybe_su ${RELX_RIAK} ping`" = "pong" ]; then
-	    maybe_su ${RELX_RIAK} pid >$PID_DIR/riak.pid
+        if [ "`maybe_su ${RELX_RIAK} ping`" = "pong" ]; then
+            maybe_su ${RELX_RIAK} pid >$PID_DIR/riak.pid
             # systemd wants it to be owned by root, so:
-	    chown root:root $PID_DIR/riak.pid 2&>1 >/dev/null \
+            chown root:root $PID_DIR/riak.pid 2&>1 >/dev/null \
                 || true  # if we are run as non-root, just never mind
-	    break
-	fi
-	sleep 2
-	c=$(($c - 1))
+            break
+        fi
+        sleep 2
+        c=$(($c - 1))
     done
 }
 
@@ -40,14 +40,14 @@ function maybe_su {
     if [[ $EUID -ne 0 ]]; then
         $*
     else
-	# if we are executing an admin command that spins up a
-	# (hidden) node to then execute custom erlang code via -eval,
-	# we need to cd to a dir containing the erlang cookie
-	# (previously implicitly done by su -, which option we have
-	# removed in order to allow any env vars to be available for
-	# the ultimate invocation of riak/riak-cs/stanchion)
-	cd {{platform_base_dir}}
-	$SU riak -c "$*"
+        # if we are executing an admin command that spins up a
+        # (hidden) node to then execute custom erlang code via -eval,
+        # we need to cd to a dir containing the erlang cookie
+        # (previously implicitly done by su -, which option we have
+        # removed in order to allow any env vars to be available for
+        # the ultimate invocation of riak/riak-cs/stanchion)
+        cd {{platform_base_dir}}
+        $SU riak_ts -c "$*"
     fi
 }
 
@@ -55,31 +55,31 @@ case "$1" in
     start)
         maybe_su $RELX_RIAK $* -pa {{platform_patch_dir}} \
             && write_pid_file
-	test -r $PID_DIR/riak.pid && exit 0
-	;;
+        test -r $PID_DIR/riak.pid && exit 0
+        ;;
     console|foreground)
         maybe_su $RELX_RIAK $* -pa {{platform_patch_dir}}
-	;;
+        ;;
     stop)
         maybe_su $RELX_RIAK $* \
-	    && delete_pid_file
-	;;
+            && delete_pid_file
+        ;;
     admin)
-	shift
-	maybe_su `which riak-admin` $*
-	;;
+        shift
+        maybe_su `which riak-admin` $*
+        ;;
     chkconfig)
-	shift
-	maybe_su `which riak-chkconfig` $*
-	;;
+        shift
+        maybe_su `which riak-chkconfig` $*
+        ;;
     repl)
-	shift
-	maybe_su `which riak-repl` $*
-	;;
+        shift
+        maybe_su `which riak-repl` $*
+        ;;
     debug)
-	shift
-	maybe_su `which riak-debug` $*
-	;;
+        shift
+        maybe_su `which riak-debug` $*
+        ;;
     *)
         ESCAPED_ARGS=`echo "$@" | sed -e 's/\([\\\(\\\){}"\x27]\)/\\\\\1/g'`
         maybe_su $RELX_RIAK $ESCAPED_ARGS

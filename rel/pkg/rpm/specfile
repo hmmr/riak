@@ -18,24 +18,24 @@
 ##
 ## -------------------------------------------------------------------
 
-Name: riak
+Name: riak-ts
 Version: %{_version}
 Release: %{_release}%{?dist}
 License: "Apache 2.0"
 Group: Development/Libraries
 Source: %{_tarname}
-URL: "https://riak.com"
-Vendor: "Riak"
-Packager: "Riak Package Maint" <"packaging@riak.com">
+URL: "tiot.jp"
+Vendor: "Riak TS"
+Packager: "Riak TS Package Maint" <"riak_ts_packaging@tiot.jp">
 BuildRoot: %{_tmppath}/%{name}-%{_revision}-%{release}-root
-Summary: "Riak is a distributed data store"
+Summary: "Riak KV is a SQL-enabled, distributed data store"
 BuildRequires: systemd gcc-c++ pam-devel
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 
 %description
-"Riak is a distributed data store"
+"Riak TS is a SQL-enabled, distributed data store"
 
 %define debug_package %{nil}
 %define __prelink_undo_cmd /bin/cat prelink library
@@ -117,18 +117,18 @@ export QA_RPATHS=3
 
 %pre
 # Pre-install script
-if ! getent group riak >/dev/null 2>&1; then
-   groupadd -r riak
+if ! getent group riak_ts >/dev/null 2>&1; then
+   groupadd -r riak_ts
 fi
 
-if getent passwd riak >/dev/null 2>&1; then
-   usermod -d %{_localstatedir}/lib/riak riak || true
+if getent passwd riak_ts >/dev/null 2>&1; then
+   usermod -d %{_localstatedir}/lib/riak riak_ts || true
 else
-   useradd -r -g riak \
+   useradd -r -g riak_ts \
            --home %{_localstatedir}/lib/riak \
-           --comment "Riak User" \
+           --comment "Riak TS User" \
            --shell /bin/bash \
-           riak
+           riak_ts
 fi
 
 
@@ -161,7 +161,7 @@ exit 0
 %{_unitdir}/%{name}.service
 %{_sbindir}/*
 
-%defattr(-,riak,riak)
+%defattr(-,riak_ts,riak_ts)
 %{_sysconfdir}/riak
 %{_localstatedir}/lib/riak
 %{_localstatedir}/log/riak

@@ -6,23 +6,23 @@
 set -e
 
 # create group
-if ! getent group riak >/dev/null; then
-        addgroup --system riak
+if ! getent group riak_ts >/dev/null; then
+        addgroup --system riak_ts
 fi
 
 # create user
-if ! getent passwd riak >/dev/null; then
-        adduser --ingroup riak \
+if ! getent passwd riak_ts >/dev/null; then
+        adduser --ingroup riak_ts \
                 --home /var/lib/riak \
                 --disabled-password \
                 --system --shell /bin/bash --no-create-home \
-                --gecos "Riak KV Database" riak
+                --gecos "Riak TS Database" riak_ts
 fi
 
 for i in lib log; do
-    chown -R riak:riak /var/$i/riak
+    chown -R riak_ts:riak_ts /var/$i/riak-ts
 done
-chown -R riak:riak /etc/riak
+chown -R riak_ts:riak_ts /etc/riak-ts
 
 case "$1" in
     configure)

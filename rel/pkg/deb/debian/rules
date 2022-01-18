@@ -36,7 +36,6 @@ install: build
 	dh_installdirs
 	dh_install
 	dh_installman
-	dh_installinit --name=riak --no-start
 	dh_fixperms
 	chmod 0755 $(ROOTDIR)/etc/riak
 	chmod -R a+rX $(ROOTDIR)/etc/riak

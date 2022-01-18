@@ -38,12 +38,12 @@ case "$1" in
                 rm  /etc/init.d/riak
         fi
         # Remove User & Group, killing any process owned by them
-        if getent passwd riak >/dev/null; then
-                pkill -u riak || true
-                deluser --quiet --system riak
+        if getent passwd riak_ts >/dev/null; then
+                pkill -u riak_ts || true
+                deluser --quiet --system riak_ts
         fi
-        if getent group riak >/dev/null; then
-                delgroup --quiet --system --only-if-empty riak || true
+        if getent group riak_ts >/dev/null; then
+                delgroup --quiet --system --only-if-empty riak_ts || true
         fi
     ;;
 

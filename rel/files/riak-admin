@@ -340,7 +340,7 @@ plan must be committed to take effect:
    force-replace <node1> <node2>   Reassign all partitions owned by <node1> to
                                    <node2> without first handing off data, and
                                    remove <node1> from the cluster.
-    
+
    location <location_name>        Assign a location to the current node
 
 Staging commands:
@@ -566,19 +566,16 @@ btype_admin()
                 exit 1
             fi
 
-            # Allow for both command line styles (quoted 3rd param) or $@ parameters
-            #     bucket-type create <type> '{"props": { ... }}'"
-            #     bucket-type create <type> {"props": { ... }}"
-            #
-            if [ $# -le 3 ]; then
-                json=`echo ${3:-}|tr -d " "`
-                $RPC_HOP riak_kv_console bucket_type_create "$2" "$json"
-            else  # greater than 3 parameters
-                two=$2
-                shift 2
-                three=`echo $@|tr -d " "`
-                $RPC_HOP riak_kv_console bucket_type_create "$two" "$three"
+            $RPC_HOP riak_kv_console bucket_type_create "$2" "$3"
+
+            ;;
+        create-from-file)
+            if [ $# -lt 2 ]; then
+                echo "Usage: $SCRIPT bucket-type create-from-file <type> <filename>"
+                exit 1
             fi
+
+            $RPC_HOP riak_kv_console bucket_type_create_from_file "$2" "$3"
 
             ;;
         update)
@@ -587,19 +584,7 @@ btype_admin()
                 exit 1
             fi
 
-            # Allow for both command line styles (quoted 3rd param) or $@ parameters
-            #     bucket-type update <type> '{"props": { ... }}'"
-            #     bucket-type update <type> {"props": { ... }}"
-            #
-            if [ $# -eq 3 ]; then
-                json=`echo $3|tr -d " "`
-                $RPC_HOP riak_kv_console bucket_type_update "$2" "$json"
-            else  # greater than 3 parameters
-                two=$2
-                shift 2
-                three=`echo $@|tr -d " "`
-                $RPC_HOP riak_kv_console bucket_type_update "$two" "$three"
-            fi
+            $RPC_HOP riak_kv_console bucket_type_update "$2" "$3"
             ;;
         list)
             if [ $# -ne 1 ]; then
@@ -614,11 +599,12 @@ Usage: $SCRIPT bucket-type <command>
 
 The follow commands can be used to manage bucket types for the cluster:
 
-   list                           List all bucket types and their activation status
-   status <type>                  Display the status and properties of a type
-   activate <type>                Activate a type
-   create <type> <json>           Create or modify a type before activation
-   update <type> <json>           Update a type after activation
+   list                               List all bucket types and their activation status
+   status <type>                      Display the status and properties of a type
+   activate <type>                    Activate a type
+   create <type> <json>               Create or modify a type before activation
+   create-from-file <type> <filename> Create or modify a type before activation, reading props from file
+   update <type> <json>               Update a type after activation
 "
     esac
 }

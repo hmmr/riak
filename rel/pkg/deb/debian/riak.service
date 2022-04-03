@@ -2,11 +2,11 @@
 Description=Riak TS Database
 
 [Service]
-User=riak_ts
-ExecStart=/usr/sbin/riak start
+User=riak
+ExecStart=/usr/sbin/riak foreground
 ExecStop=/usr/sbin/riak stop
-Type=forking
-PIDFile=/run/riak.pid
+Type=simple
+PIDFile=/run/riak/riak.pid
 EnvironmentFile=-/etc/default/riak
 RuntimeDirectory=riak
 

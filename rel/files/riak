@@ -3,30 +3,11 @@
 RUNNER_GEN_DIR={{platform_gen_dir}}
 RELX_RIAK={{platform_bin_dir}}/riak
 export PID_DIR={{pid_dir}}
-export PIPE_DIR={{pipe_dir}}/   # terminating / (relx treats it as a prefix)
+export PIPE_DIR={{pipe_dir}}/   # / is required, see https://www.erlang.org/doc/man/run_erl.html#export
+export RUNNER_LOG_DIR={{platform_log_dir}}
 
 mkdir -p $PID_DIR $PIPE_DIR
 chown riak_ts:riak_ts $PID_DIR $PIPE_DIR
-
-function write_pid_file {  # relx doesn't seem to write the pid file, does it?
-    local c=3
-    sleep 1
-    while [[ $c -ne 0 ]]; do
-        if [ "`maybe_su ${RELX_RIAK} ping`" = "pong" ]; then
-            maybe_su ${RELX_RIAK} pid >$PID_DIR/riak.pid
-            # systemd wants it to be owned by root, so:
-            chown root:root $PID_DIR/riak.pid 2&>1 >/dev/null \
-                || true  # if we are run as non-root, just never mind
-            break
-        fi
-        sleep 2
-        c=$(($c - 1))
-    done
-}
-
-function delete_pid_file {
-    rm -f $PID_DIR/riak.pid
-}
 
 # centos7-based distros have a su that contacts pam and prints the "Last logged in" message
 if [ "`cat /etc/redhat-release 2>&1`" = "CentOS Stream release 8" ] ||
@@ -40,46 +21,60 @@ function maybe_su {
     if [[ $EUID -ne 0 ]]; then
         $*
     else
-        # if we are executing an admin command that spins up a
-        # (hidden) node to then execute custom erlang code via -eval,
-        # we need to cd to a dir containing the erlang cookie
-        # (previously implicitly done by su -, which option we have
-        # removed in order to allow any env vars to be available for
-        # the ultimate invocation of riak/riak-cs/stanchion)
-        cd {{platform_base_dir}}
-        $SU riak_ts -c "$*"
-    fi
+	# if we are executing an admin command that spins up a
+	# (hidden) node to then execute custom erlang code via -eval,
+	# we need to cd to a dir containing the erlang cookie
+	# (previously implicitly done by su -, which option we have
+	# removed in order to allow any env vars to be available for
+	# the ultimate invocation of riak/riak-cs/stanchion)
+	cd "{{platform_base_dir}}"
+	# freebsd su is fairly limited, so:
+	mkdir -p "$RUNNER_GEN_DIR"
+	chown riak:riak "$RUNNER_GEN_DIR"
+	f=`mktemp "$RUNNER_GEN_DIR"/su_piggy-XXXXXXX`
+	cat >"$f" <<EOF
+#!/bin/sh
+$*
+EOF
+	chmod +x "$f"
+	chown riak:riak "$f"
+	$SU riak -c "$f"
+	rm -f "$f"
+   fi
 }
 
 case "$1" in
     start)
-        maybe_su $RELX_RIAK $* -pa {{platform_patch_dir}} \
-            && write_pid_file
-        test -r $PID_DIR/riak.pid && exit 0
-        ;;
+        maybe_su $RELX_RIAK $* -pa {{platform_patch_dir}}
+	test -r $PID_DIR/riak.pid && exit 0
+	;;
     console|foreground)
         maybe_su $RELX_RIAK $* -pa {{platform_patch_dir}}
         ;;
     stop)
         maybe_su $RELX_RIAK $* \
-            && delete_pid_file
-        ;;
+	    && rm -f $PID_DIR/riak.pid  ## relx-generated script doesn't remove it
+	;;
     admin)
-        shift
-        maybe_su `which riak-admin` $*
-        ;;
+	shift
+        # when we are called as `riak admin`, pass a flag to
+        # riak-admin script to suppress the deprecation warning (which
+        # would be printed if that script were called directly, i.e.,
+        # `riak-admin`)
+	maybe_su `which riak-admin` --suppress-deprecation-warning $*
+	;;
     chkconfig)
-        shift
-        maybe_su `which riak-chkconfig` $*
-        ;;
+	shift
+	maybe_su `which riak-chkconfig` --suppress-deprecation-warning $*
+	;;
     repl)
-        shift
-        maybe_su `which riak-repl` $*
-        ;;
+	shift
+	maybe_su `which riak-repl` --suppress-deprecation-warning $*
+	;;
     debug)
-        shift
-        maybe_su `which riak-debug` $*
-        ;;
+	shift
+	maybe_su `which riak-debug` --suppress-deprecation-warning $*
+	;;
     *)
         ESCAPED_ARGS=`echo "$@" | sed -e 's/\([\\\(\\\){}"\x27]\)/\\\\\1/g'`
         maybe_su $RELX_RIAK $ESCAPED_ARGS

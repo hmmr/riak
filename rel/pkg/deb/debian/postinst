@@ -1,28 +1,28 @@
 #!/bin/sh
-# postinst script for Riak
+# postinst script for Riak TS
 #
 # see: dh_installdeb(1)
 
 set -e
 
 # create group
-if ! getent group riak_ts >/dev/null; then
-        addgroup --system riak_ts
+if ! getent group riak >/dev/null; then
+        addgroup --system riak
 fi
 
 # create user
-if ! getent passwd riak_ts >/dev/null; then
-        adduser --ingroup riak_ts \
+if ! getent passwd riak >/dev/null; then
+        adduser --ingroup riak \
                 --home /var/lib/riak \
                 --disabled-password \
                 --system --shell /bin/bash --no-create-home \
-                --gecos "Riak TS Database" riak_ts
+                --gecos "Riak TS Database" riak
 fi
 
 for i in lib log; do
-    chown -R riak_ts:riak_ts /var/$i/riak-ts
+    chown -R riak:riak /var/$i/riak
 done
-chown -R riak_ts:riak_ts /etc/riak-ts
+chown -R riak:riak /etc/riak
 
 case "$1" in
     configure)

@@ -1,11 +1,11 @@
 _build/
+_checkouts/
 rel/riak
 rel/vars/dev*_vars.config
 dev/
 perfdev/
 ebin/
 apps/riak/.eunit
-_build
 .DS_Store
 rel/vars/*_vars.config
 riak.png

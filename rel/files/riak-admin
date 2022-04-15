@@ -565,27 +565,25 @@ btype_admin()
                 echo "Usage: $SCRIPT bucket-type create <type> ['{\"props\": { ... }}']"
                 exit 1
             fi
-
             $RPC_HOP riak_kv_console bucket_type_create "$2" "$3"
-
             ;;
+
         create-from-file)
             if [ $# -lt 2 ]; then
                 echo "Usage: $SCRIPT bucket-type create-from-file <type> <filename>"
                 exit 1
             fi
-
             $RPC_HOP riak_kv_console bucket_type_create_from_file "$2" "$3"
-
             ;;
+
         update)
             if [ $# -lt 3 ]; then
                 echo "Usage: $SCRIPT bucket-type update <type> '{\"props\": { ... }}'"
                 exit 1
             fi
-
             $RPC_HOP riak_kv_console bucket_type_update "$2" "$3"
             ;;
+
         list)
             if [ $# -ne 1 ]; then
                 echo "Usage: $SCRIPT bucket-type list"

@@ -28,8 +28,8 @@ URL: "tiot.jp"
 Vendor: "Riak TS"
 Packager: "Riak TS Package Maint" <"riak_ts_packaging@tiot.jp">
 BuildRoot: %{_tmppath}/%{name}-%{_revision}-%{release}-root
-Summary: "Riak KV is a SQL-enabled, distributed data store"
-BuildRequires: systemd systemd-rpm-macros gcc-c++ pam-devel autoconf automake libtool
+Summary: "Riak TS is a SQL-speaking, timeseries-optimised, Riak-based distributed data store"
+BuildRequires: systemd gcc-c++ pam-devel autoconf automake libtool
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd

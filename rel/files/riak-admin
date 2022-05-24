@@ -568,7 +568,8 @@ btype_admin()
                 echo "Usage: $SCRIPT bucket-type create <type> ['{\"props\": { ... }}']"
                 exit 1
             fi
-            rpc riak_kv_console bucket_type_create "$2" "$3"
+            # spaces in the second arg won't be preserved, so:
+            rpc_raw riak_kv_console bucket_type_create "[[\"$2\", \"$3\"]]"
             ;;
 
         create-from-file)
@@ -584,7 +585,7 @@ btype_admin()
                 echo "Usage: $SCRIPT bucket-type update <type> '{\"props\": { ... }}'"
                 exit 1
             fi
-            rpc riak_kv_console bucket_type_update "$2" "$3"
+            rpc_raw riak_kv_console bucket_type_update "[[\"$2\", \"$3\"]]"
             ;;
 
         list)

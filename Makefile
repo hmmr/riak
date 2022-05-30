@@ -21,16 +21,12 @@ export EXOMETER_PACKAGES
 
 $(if $(ERLANG_BIN),,$(warning "Warning: No Erlang found in your path, this will probably not work"))
 
-.PHONY: rel stagedevrel deps
+.PHONY: rel stagedevrel
 
-all: deps compile
+all: compile
 
 compile:
 	$(REBAR) compile
-
-deps:
-	$(if $(HEAD_REVISION),$(warning "Warning: you have checked out a tag ($(HEAD_REVISION)) and should use the compile target"))
-	$(REBAR) upgrade --all
 
 clean: testclean
 	$(REBAR) clean
@@ -102,7 +98,7 @@ rel-fbsdng: compile
 
 relclean:
 	@rm -rf $(REL_DIR)
-	@rm -rf rel/riak rel/.libs rel/.deps
+	@rm -rf rel/riak
 
 ##
 ## Developer targets

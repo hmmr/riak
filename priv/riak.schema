@@ -61,6 +61,18 @@
   {datatype, string}
 ]}.
 
+%% @doc Filename to use for SASL reports.
+{mapping, "logger.sasl.enabled", "kernel.logger", [
+  {default, on},
+  {datatype, {flag, on, off}}
+]}.
+
+%% @doc Filename to use for SASL reports.
+{mapping, "logger.sasl.file", "kernel.logger", [
+  {default, "$(platform_log_dir)/reports.log"},
+  {datatype, file}
+]}.
+
 %% @doc Default opts that need setting for the syslogger application to ensure that
 %% the PID is printed with log messages, along with the correct process identifier.
 {translation, "syslogger",
@@ -92,12 +104,31 @@
     ConfigMap0 = #{config => #{file => LogFile,
                               max_no_bytes => MaxNumBytes,
                               max_no_files => MaxNumFiles},
-                  formatter => {logger_formatter, 
-                                    #{template => DefaultFormatTerm}
-                               }
-                 },
-
+                   filters => [{no_sasl, {fun logger_filters:domain/2, {stop, super, [otp, sasl]}}}],
+                   formatter => {logger_formatter,
+                                 #{template => DefaultFormatTerm}
+                                }
+                  },
     DefaultLog = [{handler, default, logger_std_h, ConfigMap0}],
+
+    SaslLog =
+        case cuttlefish:conf_get("logger.sasl.enabled", Conf) of
+            true ->
+                SaslLogFile = cuttlefish:conf_get("logger.sasl.file", Conf),
+                SaslConfigMap = #{config => #{file => SaslLogFile,
+                                              max_no_bytes => MaxNumBytes,  %% reuse
+                                              max_no_files => MaxNumFiles},
+                                  filter_default => stop,
+                                  filters => [{sasl_here, {fun logger_filters:domain/2, {log, equal, [otp, sasl]}}}],
+                                  formatter => {logger_formatter,
+                                                #{legacy_header => true,
+                                                  single_line => false}
+                                               }
+                                 },
+                [{handler, sasl, logger_std_h, SaslConfigMap}];
+            _ ->
+                []
+        end,
 
     SyslogLog =
         case cuttlefish:conf_get("syslogger.enabled", Conf) of
@@ -118,14 +149,14 @@
                             cuttlefish:error(foo)
                     end,
                 ConfigMap1 = #{level => SyslogLevel,
-                               formatter => {logger_formatter, 
+                               formatter => {logger_formatter,
                                                 #{template => SyslogFormatTerm,
                                                   single_line => true}}, facility => SyslogFacility},
                 [{handler, syslog, syslogger, ConfigMap1}];
             false ->
                 []
         end,
-    DefaultLog ++ SyslogLog
+    DefaultLog ++ SyslogLog ++ SaslLog
   end
 }.
 

@@ -208,3 +208,53 @@
   {datatype, {duration, ms}}
 ]}.
 {{/devrel}}
+
+
+%% deprecated/dropped items
+{mapping, "log.console", "riak.deprecated_log_console", [ignore]}.
+{mapping, "log.console.level", "riak.ignore_log_console_level", [ignore]}.
+{mapping, "log.console.file", "riak.ignore_log_console_file", [ignore]}.
+{mapping, "log.error.file", "riak.ignore_log_error_file", [ignore]}.
+{mapping, "log.syslog", "riak.ignore_log_syslog", [ignore]}.
+{mapping, "log.crash", "riak.ignore_log_crash", [ignore]}.
+{mapping, "log.crash.file", "riak.ignore_log_crash_file", [ignore]}.
+{mapping, "log.crash.size", "riak.ignore_log_crash_size", [ignore]}.
+{mapping, "log.crash.maximum_message_size", "riak.ignore_log_crash_maximum_message_size", [ignore]}.
+{mapping, "log.crash.rotation", "riak.ignore_log_crash_rotation", [ignore]}.
+{mapping, "log.crash.rotation.keep", "riak.ignore_log_crash_rotation_keep", [ignore]}.
+{mapping, "bitcask.data_root", "riak.ignore_bitcask_data_root", [ignore]}.
+{mapping, "bitcask.io_mode", "riak.ignore_bitcask_io_mode", [ignore]}.
+{mapping, "multi_backend", "riak.ignore_multi_backend", [ignore]}.
+{mapping, "riak_control", "riak.ignore_riak_control", [ignore]}.
+{mapping, "riak_control.auth.mode", "riak.ignore_riak_control_auth_mode", [ignore]}.
+{mapping, "search", "riak.ignore_search", [ignore]}.
+{mapping, "search.solr.start_timeout", "riak.ignore_searchsolr_start_timeout", [ignore]}.
+{mapping, "search.solr.port", "riak.ignore_searchsolr_port", [ignore]}.
+{mapping, "search.solr.jmx_port", "riak.ignore_search_solr_jmx_port", [ignore]}.
+{mapping, "search.solr.jvm_options", "riak.ignore_search_solr_jvm_options", [ignore]}.
+{mapping, "search.anti_entropy.data_dir", "riak.ignore_search_anti_entropy_data_dir", [ignore]}.
+{mapping, "search.root_dir", "riak.ignore_search_root_dir", [ignore]}.
+{mapping, "search.temp_dir", "riak.ignore_search_temp_dir", [ignore]}.
+{mapping, "search.solr.request_timeout", "riak.ignore_search_solr_request_timeout", [ignore]}.
+{mapping, "search.solr.ed_request_timeout", "riak.ignore_search_solr_ed_request_timeout", [ignore]}.
+{mapping, "search.anti_entropy", "riak.ignore_search_anti_entropy", [ignore]}.
+{mapping, "search.anti_entropy.throttle", "riak.ignore_search_anti_entropy_throttle", [ignore]}.
+{mapping, "search.anti_entropy.throttle.$tier.solrq_queue_length", "riak.ignore_search_anti_entropy_throttle_$tier_solrq_queue_length", [ignore]}.
+{mapping, "search.anti_entropy.throttle.$tier.delay", "riak.ignore_search_anti_entropy_throttle_$tier_delay", [ignore]}.
+{mapping, "search.index.error_threshold.failure_count", "riak.ignore_search_index_error_threshold_failure_count", [ignore]}.
+{mapping, "search.index.error_threshold.failure_interval", "riak.ignore_search_index_error_threshold_failure_interval", [ignore]}.
+{mapping, "search.index.error_threshold.reset_interval", "riak.ignore_search_index_error_threshold_reset_interval", [ignore]}.
+{mapping, "search.fuse_context", "riak.ignore_search_fuse_context", [ignore]}.
+{mapping, "search.queue.batch.minimum", "riak.ignore_search_queue_batch_minimum", [ignore]}.
+{mapping, "search.queue.batch.maximum", "riak.ignore_search_queue_batch_maximum", [ignore]}.
+{mapping, "search.queue.batch.flush_interval", "riak.ignore_search_queue_batch_flush_interval", [ignore]}.
+{mapping, "search.queue.high_watermark", "riak.ignore_search_queue_high_watermark", [ignore]}.
+{mapping, "search.queue.high_watermark.purge_strategy", "riak.ignore_search_queue_high_watermark_purge_strategy", [ignore]}.
+{mapping, "search.queue.drain.timeout", "riak.ignore_search_queue_drain_timeout", [ignore]}.
+{mapping, "search.queue.drain.cancel.timeout", "riak.ignore_search_queue_drain_cancel_timeout", [ignore]}.
+{mapping, "search.queue.drain.enable", "riak.ignore_search_queue_drain_enable", [ignore]}.
+{mapping, "search.ibrowse_max_sessions", "riak.ignore_search_ibrowse_max_sessions", [ignore]}.
+{mapping, "search.ibrowse_max_pipeline_size", "riak.ignore_search_ibrowse_max_pipeline_size", [ignore]}.
+{mapping, "cluster.job.yokozuna.query", "riak.ignore_cluster_job_yokozuna_query", [ignore]}.
+{mapping, "search.dist_query", "riak.ignore_search_dist_query", [ignore]}.
+{mapping, "search.update_hook", "riak.ignore_search_update_hook", [ignore]}.

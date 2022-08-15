@@ -1,8 +1,8 @@
 Source: riak-ts
 Section: net
 Priority: extra
-Maintainer: packaging <riak_ts-packaging@tiot.jp
-Build-Depends: debhelper (>= 7), libpam0g-dev, libncurses-dev, g++, dh-make, autoconf, automake
+Maintainer: riak_ts-packaging@tiot.jp
+Build-Depends: debhelper (>= 7), libpam0g-dev, libncurses-dev, g++, dh-make, autoconf, automake, libboost-all-dev
 Standards-Version: 3.9.3
 Homepage: tiot.jp
 

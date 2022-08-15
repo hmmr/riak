@@ -40,6 +40,7 @@ install: build
 	chmod -R a+rX $(ROOTDIR)/etc/riak
 	chmod -R go+rX $(ROOTDIR)/usr/lib/riak/lib
 	dh_shlibdeps
+	dh_systemd_enable
 
 # We have nothing to do by default.
 binary-indep: install build-stamp

@@ -12,7 +12,7 @@
 export DH_VERBOSE=1
 
 #export REBAR_GIT_CLONE_OPTIONS="--depth 1"
-ROOTDIR := debian/riak
+ROOTDIR := debian/riak-ts
 
 ## Clear variables that may confound our build of sub-projects; also
 ## note that it is necessary to use overlay_vars relative to .. as
@@ -38,7 +38,7 @@ install: build
 	dh_fixperms
 	chmod 0755 $(ROOTDIR)/etc/riak
 	chmod -R a+rX $(ROOTDIR)/etc/riak
-	chmod -R go+rX debian/riak/usr/lib/riak/lib/
+	chmod -R go+rX $(ROOTDIR)/usr/lib/riak/lib
 	dh_shlibdeps
 
 # We have nothing to do by default.

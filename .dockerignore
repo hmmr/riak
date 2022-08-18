@@ -1,0 +1,5 @@
+log/
+dev/
+_build/
+rel/pkg/
+rel/riak/

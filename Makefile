@@ -96,6 +96,10 @@ rel-fbsdng: compile
 	@$(REBAR) as fbsdng release
 	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/fbsdng/rel riak && tar -x -f rel.tar -C rel && rm rel.tar
 
+rel-docker: compile relclean
+	REBAR_CONFIG=rebar.docker.config $(REBAR) release
+	@cp -a _build/default/rel/riak rel/
+
 relclean:
 	@rm -rf $(REL_DIR)
 	@rm -rf rel/riak

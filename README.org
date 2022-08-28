@@ -3,11 +3,11 @@
 Welcome to Riak.
 
 * Overview
-  Riak is a distributed, decentralized data storage system. 
-  
+  Riak is a distributed, decentralized data storage system.
+
   In the wiki, you will find the "quick start" directions for setting up and
   using Riak.  For more information, browse the following files:
- 
+
     - README:  this file
     - LICENSE: the license under which Riak is released
     - doc/

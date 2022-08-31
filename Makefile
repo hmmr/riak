@@ -72,33 +72,40 @@ test : testclean eunit test-deps
 rel: compile
 	@$(REBAR) as rel release
 # freebsd tar won't write to stdout, so:
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/rel/rel riak && tar -x -f rel.tar -C rel && rm rel.tar
 
 rel-rpm: compile
 	@$(REBAR) as rpm release
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar --exclude-vcs -c -C _build/rpm/rel riak | tar -x -C rel
 
 rel-deb: compile
 	@$(REBAR) as deb release
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar --exclude=vcs -c -C _build/deb/rel riak | tar -x -C rel
 
 rel-osx: compile
 	@$(REBAR) as osx release
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar --exclude=vcs -c -C _build/osx/rel riak | tar -x -C rel
 
 # this one is to be called from an external make (not from rel/pkg/Makefile)
 rel-alpine: compile
 	@$(REBAR) as alpine release
 	@(cd _build/alpine/rel/riak/usr/bin && mv riak-nosu riak)
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar --exclude=vcs -c -C _build/alpine/rel riak | tar -x -C rel
 
 rel-fbsdng: compile
 	@$(REBAR) as fbsdng release
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/fbsdng/rel riak && tar -x -f rel.tar -C rel && rm rel.tar
 
 rel-docker: compile relclean
 	REBAR_CONFIG=rebar.docker.config $(REBAR) release
 	@cp -a _build/default/rel/riak rel/
+	@rel/gen_shell rel rel/files/riak_shell.config.src rel/riak/etc/riak_shell.config
 
 relclean:
 	@rm -rf $(REL_DIR)
@@ -125,12 +132,14 @@ $(eval stagedevrel : $(foreach n,$(SEQ),stagedev$(n)))
 $(eval devrel : $(foreach n,$(SEQ),dev$(n)))
 
 dev% : compile
-	rel/gen_dev dev$* rel/vars/dev_vars.config.src rel/vars/$*_vars.config
-	$(REBAR) as dev release -o dev/dev$* --overlay_vars rel/vars/$*_vars.config
+	@rel/gen_dev dev$* rel/vars/dev_vars.config.src rel/vars/$*_vars.config
+	@$(REBAR) as dev release -o dev/dev$* --overlay_vars rel/vars/$*_vars.config
+	@rel/gen_shell $(DEVNODES) rel/files/riak_shell.config.src dev/dev$*/riak/etc/riak_shell.config
 
 stagedev% : compile
-	rel/gen_dev dev$* rel/vars/dev_vars.config.src rel/vars/$*_vars.config
-	$(REBAR) as dev release -o dev/dev$* --overlay_vars rel/vars/$*_vars.config
+	@rel/gen_dev dev$* rel/vars/dev_vars.config.src rel/vars/$*_vars.config
+	@$(REBAR) as dev release -o dev/dev$* --overlay_vars rel/vars/$*_vars.config
+	@rel/gen_shell $(DEVNODES) rel/files/riak_shell.config.src dev/dev$*/riak/etc/riak_shell.config
 
 perfdev : all
 	perfdev/bin/riak stop || :

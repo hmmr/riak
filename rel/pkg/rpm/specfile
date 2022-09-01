@@ -29,7 +29,7 @@ Vendor: "Riak TS"
 Packager: "Riak TS Package Maint" <"riak_ts_packaging@tiot.jp">
 BuildRoot: %{_tmppath}/%{name}-%{_revision}-%{release}-root
 Summary: "Riak TS is a SQL-speaking, timeseries-optimised, Riak-based distributed data store"
-BuildRequires: systemd gcc-c++ pam-devel autoconf automake libtool
+BuildRequires: systemd gcc-c++ pam-devel autoconf automake libtool cmake boost-devel ncurses-devel openssl-devel
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd

@@ -1,6 +1,6 @@
 export
 
-TAR_VERSION = $(shell git describe --tags | sed -e 's/\([0-9.]*\-[0-9]*\)-.*/\1/')
+TAR_VERSION = $(shell git describe --tags | sed -e 's/riak_ts-\([0-9.rc]\+\(\|-g[0-9a-f]\+\)\)/\1/')
 
 DEBEMAIL = $(shell git config user.email)
 
@@ -13,7 +13,7 @@ default:
 
 	cd $(BASE_DIR)/rel/pkg/out/$(PKG_ID); \
 	(mkdir -p _build/default && cd _build/default && for d in lib; do ln -fs $(BASE_DIR)/_build/default/$$d; done); \
-	dch  --create --package riak-ts -v "$(PKG_VERSION)" \
+	dch  --create --package riak-ts -v "$(TAR_VERSION)" \
              "Build from $(PKG_ID)";\
 	debuild --prepend-path=$(ERLANG_BIN) \
 			-e REVISION=$(PKG_VERSION) \

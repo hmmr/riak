@@ -1,6 +1,6 @@
-name: "riak"
+name: "riak-ts"
 origin: "databases"
-comment: "Riak"
+comment: "Riak TS"
 licenses: ["Apache 2"]
 licenselogic: "single"
 arch: "freebsd:13:x86:64"

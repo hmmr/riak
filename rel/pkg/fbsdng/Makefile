@@ -14,8 +14,8 @@ PUSRBIN_DIR      = $(BUILD_STAGE_DIR)/usr/local/bin
 PDATA_DIR        = $(BUILD_STAGE_DIR)/usr/local/var/lib/riak
 PLOG_DIR         = $(BUILD_STAGE_DIR)/var/log/riak
 
-PKGNAME = riak-$(PKG_VERSION)-$(OSNAME)-$(ARCH).tbz
-
+PKGNAME = $(PKG_VERSION)-$(OSNAME)-$(ARCH).tbz
+PKG_SHORT_VERSION = $(shell echo $(PKG_VERSION) | sed -e 's/^riak_ts-//')
 
 # Recursive assignment of ERTS version
 # We will know this after building the rel
@@ -41,7 +41,7 @@ packing_list_files: $(BUILD_STAGE_DIR)
 	chmod -w ${BUILD_STAGE_DIR}/usr/local/etc/rc.d/riak
 	chmod +x ${BUILD_STAGE_DIR}/usr/local/etc/rc.d/riak
 	@cd $(BUILD_STAGE_DIR) && \
-	        echo "version: \"${PKG_VERSION}\"" >> +MANIFEST && \
+	        echo "version: \"${PKG_SHORT_VERSION}\"" >> +MANIFEST && \
 	        echo "files: {" >> +MANIFEST
 
 	@echo "Copying Man pages to staging directory"
@@ -75,7 +75,7 @@ $(BUILD_STAGE_DIR): buildrel
 	@echo "Copying rel directory to staging directory"
 	mkdir -p $@
 	mkdir -p $(PBIN_DIR) $(PUSRBIN_DIR)
-	for f in riak-admin riak-debug riak-repl riak-chkconfig; do \
+	for f in riak-admin riak-debug riak-repl riak-chkconfig riak-shell; do \
 	    cp -R rel/riak/bin/$$f $(PUSRBIN_DIR); \
 	done
 	cp -R rel/riak/usr/bin/riak $(PUSRBIN_DIR)

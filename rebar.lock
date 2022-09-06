@@ -26,7 +26,7 @@
   1},
  {<<"eleveldb">>,
   {git,"https://github.com/TI-Tokyo/eleveldb.git",
-       {ref,"c08ac32d414640f8809350f9ab844d5c5c13898c"}},
+       {ref,"30eff8916a83e001a79db396ed3536cd7862cdb0"}},
   2},
  {<<"exometer_core">>,{pkg,<<"exometer_core">>,<<"1.6.1">>},2},
  {<<"folsom">>,{pkg,<<"folsom">>,<<"1.0.0">>},3},

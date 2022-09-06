@@ -3,6 +3,8 @@
 ##
 export
 
+MAKE = make  # maybe redefined as gmake for freebsd
+
 OS            = $(shell uname -s)
 ERLANG_BIN   ?= $(shell dirname $(shell which erl))
 DEPS_DIR     ?= deps
@@ -63,6 +65,7 @@ OSNAME        = FreeBSD
 ARCH          = $(shell uname -m)
 BUILDDIR      = fbsdbuild
 PKGNG         = $(shell uname -r | awk -F. '{ print ($$1 > 9) ? "true" : "false" }')
+MAKE          = gmake
 ifeq ($(PKGNG),true)        # FreeBSD 10.0 or greater
 PKGERDIR      = fbsdng
 else                        # Older FreeBSD pkg_add

@@ -71,6 +71,7 @@ test : testclean eunit test-deps
 ##
 rel: compile
 	@$(REBAR) as rel release
+	@sed -i 's|#!/bin/sh|#!/bin/bash|' _build/rel/rel/riak/bin/riak
 # freebsd tar won't write to stdout, so:
 	@rel/gen_shell rel rel/files/riak_shell.config.src _build/rel/rel/riak/etc/riak_shell.config
 	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/rel/rel riak && tar -x -f rel.tar -C rel && rm rel.tar
@@ -82,6 +83,7 @@ rel-rpm: compile
 
 rel-deb: compile
 	@$(REBAR) as deb release
+	@sed -i 's|#!/bin/sh|#!/bin/bash|' _build/deb/rel/riak/bin/riak
 	@rel/gen_shell rel rel/files/riak_shell.config.src _build/deb/rel/riak/etc/riak_shell.config
 	@tar --exclude=vcs -c -C _build/deb/rel riak | tar -x -C rel
 

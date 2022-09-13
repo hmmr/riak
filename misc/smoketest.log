@@ -1,0 +1,13 @@
+%% -*- mode: erlang -*-
+
+%% this log can be 'replayed' in riak shell with `replay_log "/path/to/smoketest.log"`
+
+{{command, "create table ttt (a varchar not null, t timestamp not null, i sint64 not null, s varchar, primary key ((i, quantum(t, 10, 's')), i, t));"}, {result, "Table ttt successfully created and activated."}}.
+{{command, "insert into ttt values ('keke', '1999-08-02T10:00:00Z', 48, 'fghj');"}, {result, "Inserted 1 row."}}.
+{{command, "select * from ttt where t > '1999-08-02T09:00:00Z' and t < '1999-08-02T11:00:00Z' and i = 48;"}, {result, "+----+--------------------+--+----+
+| a  |         t          |i | s  |
++----+--------------------+--+----+
+|keke|1999-08-02T10:00:00Z|48|fghj|
++----+--------------------+--+----+
+
+"}}.

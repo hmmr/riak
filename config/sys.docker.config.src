@@ -36,7 +36,7 @@
      [{cluster_mgr, {"${RIAK_CORE_CLUSTER_MGR_IP}", ${RIAK_CORE_CLUSTER_MGR_PORT}}},
       {default_bucket_props,
           [{last_write_wins, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_LAST_WRITE_WINS}},
-           {allow_mult,false, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_ALLOW_MULT}},
+           {allow_mult, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_ALLOW_MULT}},
            {basic_quorum, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_BASIC_QUORUM}},
            {notfound_ok, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_NOTFOUND_OK}},
            {rw, ${RIAK_CORE_DEFAULT_BUCKET_PROPS_RW}},

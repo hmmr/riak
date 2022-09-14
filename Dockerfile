@@ -1,6 +1,8 @@
 FROM erlang:22 AS compile-image
 
-RUN apt-get update && apt-get install -y cmake libboost-all-dev libpam0g-dev libncurses-dev autoconf automake
+RUN apt-get update && \
+    apt-get install -y autoconf automake libtool cmake libpam0g-dev \
+            bash
 
 WORKDIR /usr/src/riak
 COPY . /usr/src/riak

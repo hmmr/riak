@@ -23,5 +23,6 @@ if [ "$DEV_NODES" != "rel" ]; then
     done
 fi
 
+mkdir -p `dirname "$SHELLCONFIG"`
 echo "Writing Riak Shell config for $DEV_NODES Nodes in $SHELLCONFIG"
-sed -e "s/@NODES@/$NODES/" < $TEMPLATE | tr "|" "\n" > $SHELLCONFIG
+sed -e "s/@NODES@/$NODES/" < "$TEMPLATE" | tr "|" "\n" > "$SHELLCONFIG"

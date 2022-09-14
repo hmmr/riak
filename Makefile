@@ -106,8 +106,9 @@ rel-fbsdng: compile
 
 rel-docker: compile relclean
 	REBAR_CONFIG=rebar.docker.config $(REBAR) release
-	@rel/gen_shell rel rel/files/riak_shell.config.src _build/rel/rel/riak/etc/riak_shell.config
-	@cp -a _build/default/rel/riak rel/
+	@sed -i 's|#!/bin/sh|#!/bin/bash|' _build/default/rel/riak/bin/riak
+	rel/gen_shell rel rel/files/riak_shell.config.src _build/default/rel/riak/etc/riak_shell.config
+	cp -a _build/default/rel/riak rel/
 
 relclean:
 	@rm -rf $(REL_DIR)

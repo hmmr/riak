@@ -6,7 +6,7 @@ addition of features (notably, support for LIMIT/ORDER BY and query
 buffers) originally to be included in riak\_ts-1.6.0. It is built and
 tested on OTP-22.
 
-This release was made possible through sponsorship from TI Tokyo.
+This release was made possible through sponsorship from [TI Tokyo](https://tiot.jp).
 
 Relevant integration tests can be found in branch
 [riak_ts-develop]("https://github.com/TI-Tokyo/riak_test/tree/riak_ts-develop/tests")

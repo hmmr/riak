@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 [{leveled,
      [{snapshot_timeout_long, ${LEVELED_SNAPSHOT_TIMEOUT_LONG}},
       {snapshot_timeout_short, ${LEVELED_SNAPSHOT_TIMEOUT_SHORT}},
@@ -223,8 +224,7 @@
       {logger,
           [{handler,default,logger_std_h,
                #{config =>
-                     #{file => "${KERNEL_LOGGER_DEFAULT_FILE}", max_no_bytes => ${KERNEL_LOGGER_DEFAULT_MAX_NO_BYTES},
-                       max_no_files => ${KERNEL_LOGGER_DEFAULT_MAX_NO_FILES}},
+                     #{type => standard_io},
                  filters =>
                      [{no_sasl,
                           {fun logger_filters:domain/2,
@@ -236,8 +236,7 @@
                                 msg,"\n"]}}}},
            {handler,sasl,logger_std_h,
                #{config =>
-                     #{file => "${KERNEL_LOGGER_SASL_FILE}", max_no_bytes => ${KERNEL_LOGGER_SASL_MAX_NO_BYTES},
-                       max_no_files => ${KERNEL_LOGGER_SASL_MAX_NO_FILES}},
+                     #{type => standard_error},
                  filter_default => stop,
                  filters =>
                      [{sasl_here,

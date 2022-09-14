@@ -1,5 +1,8 @@
 log/
 dev/
-_build/
+# avoid pulling deps every time we build riak, but specifically rebuild those with C/C++ code
+_build/default/lib/eleveldb
+_build/default/lib/ebloom
+_build/default/lib/syslogger
 rel/pkg/
 rel/riak/

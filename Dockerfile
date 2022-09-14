@@ -229,4 +229,6 @@ EXPOSE $RIAK_API_PB_PORT $RIAK_API_HTTP_PORT $RIAK_CORE_HANDOFF_PORT $RIAK_CORE_
 WORKDIR /opt/riak
 ENV RIAK_PATH=/opt/riak CODE_LOADING_MODE=interactive
 RUN mkdir lib/schema && mv lib/*/priv/*.schema /opt/riak/lib/schema
-CMD /opt/riak/bin/riak foreground
+RUN echo "riak" >/root/.erlang.cookie && chmod 600 /root/.erlang.cookie
+
+CMD /opt/riak/bin/riak console

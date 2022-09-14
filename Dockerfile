@@ -227,6 +227,6 @@ ENV LEVELED_SNAPSHOT_TIMEOUT_LONG=86400 \
 EXPOSE $RIAK_API_PB_PORT $RIAK_API_HTTP_PORT $RIAK_CORE_HANDOFF_PORT $RIAK_CORE_CLUSTER_MGR_PORT
 
 WORKDIR /opt/riak
-ENV RIAK_PATH=/opt/riak
+ENV RIAK_PATH=/opt/riak CODE_LOADING_MODE=interactive
 RUN mkdir lib/schema && mv lib/*/priv/*.schema /opt/riak/lib/schema
 CMD /opt/riak/bin/riak foreground

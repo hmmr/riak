@@ -432,7 +432,7 @@ Version 3 MDC replication:
              Allow a connected sink cluster to request Riak CS blocks in
              realtime from *this* source cluster.
 
-      clusterstats [{<ip:-port> | <protocol-id>}]
+      clusterstats [{<ip:port> | <protocol-id>}]
              protocol-id = cluster_mgr | rt_repl | fs_repl
 
              Displays current cluster stats using an optional ip:port as well as
@@ -445,21 +445,21 @@ Version 3 MDC replication:
 
       add-block-provider-redirect [<from-cluster-id> <to-cluster-id>]
 
-             provide a redirection to the <to-cluster-id> for proxy_get if
-             the original cluster is going to be put out of service
+             Provide a redirection to the <to-cluster-id> for proxy_get if
+             the original cluster is going to be put out of service.
 
       show-block-provider-redirect [<from-cluster-id>]
-             show the mapping for a given cluster-id redirect
+             Show the mapping for a given cluster-id redirect.
 
       delete-block-provider-redirect [<from-cluster-id>]
 
-             delete a pre-existing redirect such that proxy_gets go
+             Delete a pre-existing redirect such that proxy_gets go
              again to the original provider cluster id.
 
       show-local-cluster-id []
 
-             display this cluster's cluster-id tuple, for use with the *-block-provider-redirect
-             commands
+             Display this cluster's cluster-id tuple, for use with the *-block-provider-redirect
+             commands.
 
    Performance Tuning:
 

@@ -3,6 +3,7 @@ Description=Riak TS Database
 
 [Service]
 User=riak
+Environment=CODE_LOADING_MODE=interactive
 ExecStart=/usr/sbin/riak foreground
 ExecStop=/usr/sbin/riak stop
 Type=simple

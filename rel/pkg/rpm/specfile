@@ -35,7 +35,7 @@ Requires(preun): systemd
 Requires(postun): systemd
 
 %description
-"Riak TS is a SQL-enabled, distributed data store"
+"Riak TS is a write-optimized, NoSQL data store based on Riak"
 
 %define debug_package %{nil}
 %define __prelink_undo_cmd /bin/cat prelink library
@@ -80,6 +80,7 @@ make rel-rpm
 %define buildroot_sbin %{buildroot}%{_sbindir}
 %define buildroot_unit %{buildroot}%{_unitdir}
 %define buildroot_run %{buildroot}%{_rundir}
+%define buildroot_man %{buildroot}%{_mandir}
 
 mkdir -p \
   %{buildroot_etc} \
@@ -87,6 +88,7 @@ mkdir -p \
   %{buildroot_bin} \
   %{buildroot_sbin} \
   %{buildroot_unit} \
+  %{buildroot_man} \
   %{buildroot_run}/riak \
   %{buildroot}%{_localstatedir}/lib/riak \
   %{buildroot}%{_localstatedir}/log/riak
@@ -107,6 +109,7 @@ cp %{relpath}/usr/sbin/riak %{buildroot}%{_sbindir}
 cp %{relpath}/etc/riak.conf %{buildroot_etc}
 cp %{relpath}/etc/riak_shell.config %{buildroot_etc}
 cp %{relpath}/etc/advanced.config %{buildroot_etc}
+cp -a %{_builddir}/%{buildsubdir}/doc/man/man1 %{buildroot_man}
 for f in riak-admin riak-repl riak-debug riak-shell; do
     cp %{relpath}/bin/$f %{buildroot}%{_sbindir}
 done
@@ -166,6 +169,7 @@ exit 0
 %{_libdir}/*
 %{_unitdir}/%{name}.service
 %{_sbindir}/*
+%{_mandir}/*
 
 %defattr(-,riak,riak)
 %{_sysconfdir}/riak

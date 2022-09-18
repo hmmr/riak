@@ -12,6 +12,23 @@ Relevant integration tests can be found in branch
 [riak_ts-develop]("https://github.com/TI-Tokyo/riak_test/tree/riak_ts-develop/tests")
 of riak\_test repo (ts\_*).
 
+## Compatibility notes
+
+* This release can read data written by previous versions of Riak
+  TS. However, due to changes in TS record layout in leveldb,
+  downgrading from 3.0.0 to 1.x will not be possible.
+
+* It is recommended to use riak.conf and advanced.config from 3.0.0
+  (or edit those files to suit your needs), rather than copy the
+  contents of etc from a previous installation.
+
+* Because Riak TS installs into the same paths as Riak proper, Riak
+  and Riak TS cannot coexist on the same host. Also, if you install
+  Riak TS on a system where Riak was previously installed, make sure
+  /etc/riak and /var/lib/riak are cleaned out (note that standard
+  `apt-get remove` or `yum remove` will not remove the files in
+  /var/lib and /etc).
+
 # Riak TS 1.5.2 Release Notes
 * http://docs.basho.com/riak/ts/1.5.2/releasenotes/
 

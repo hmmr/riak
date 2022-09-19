@@ -85,19 +85,19 @@ rel-deb: compile
 	@$(REBAR) as deb release
 	@sed -i 's|#!/bin/sh|#!/bin/bash|' _build/deb/rel/riak/bin/riak
 	@rel/gen_shell rel rel/files/riak_shell.config.src _build/deb/rel/riak/etc/riak_shell.config
-	@tar --exclude=vcs -c -C _build/deb/rel riak | tar -x -C rel
+	@tar --exclude-vcs -c -C _build/deb/rel riak | tar -x -C rel
 
 rel-osx: compile
 	@$(REBAR) as osx release
 	@rel/gen_shell rel rel/files/riak_shell.config.src _build/osx/rel/riak/etc/riak_shell.config
-	@tar --exclude=vcs -c -C _build/osx/rel riak | tar -x -C rel
+	@tar --exclude-vcs -c -C _build/osx/rel riak | tar -x -C rel
 
 # this one is to be called from an external make (not from rel/pkg/Makefile)
 rel-alpine: compile
 	@$(REBAR) as alpine release
 	@(cd _build/alpine/rel/riak/usr/bin && mv riak-nosu riak)
 	@rel/gen_shell rel rel/files/riak_shell.config.src _build/alpine/rel/riak/etc/riak_shell.config
-	@tar --exclude=vcs -c -C _build/alpine/rel riak | tar -x -C rel
+	@tar --exclude-vcs -c -C _build/alpine/rel riak | tar -x -C rel
 
 rel-fbsdng: compile
 	@$(REBAR) as fbsdng release

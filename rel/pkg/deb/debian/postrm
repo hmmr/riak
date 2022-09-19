@@ -21,7 +21,6 @@ set -e
 
 case "$1" in
     purge)
-        rm -f /etc/default/riak
         if [ -d /var/log/riak ]; then
                 rm -r /var/log/riak
         fi
@@ -33,9 +32,6 @@ case "$1" in
         fi
         if [ -d /etc/riak ]; then
                 rm -r /etc/riak
-        fi
-        if [ -e /etc/init.d/riak ]; then
-                rm  /etc/init.d/riak
         fi
         # Remove User & Group, killing any process owned by them
         if getent passwd riak >/dev/null; then

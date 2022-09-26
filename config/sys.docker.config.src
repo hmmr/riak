@@ -1,4 +1,3 @@
-%% -*- mode: erlang -*-
 [{leveled,
      [{snapshot_timeout_long, ${LEVELED_SNAPSHOT_TIMEOUT_LONG}},
       {snapshot_timeout_short, ${LEVELED_SNAPSHOT_TIMEOUT_SHORT}},
@@ -217,6 +216,10 @@
       {honor_cipher_order, ${RIAK_API_HONOR_CIPHER_ORDER}},
       {tls_protocols, ['tlsv1.2']},
       {check_crl, ${RIAK_API_CHECK_CRL}}]},
+ {riak_control,
+     [{enabled, ${RIAK_CONTROL_ENABLED}},
+      {auth, ${RIAK_CONTROL_AUTH}},
+      {userlist, ${RIAK_CONTROL_USERLIST}}]},
  {riak,
      []},
  {kernel,

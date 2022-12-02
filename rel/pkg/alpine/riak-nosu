@@ -24,7 +24,6 @@ case "$1" in
             && rm -f $PID_DIR/riak.pid
         ;;
     *)
-        ESCAPED_ARGS=`echo "$@" | sed -e 's/\([\\\(\\\){}"\x27]\)/\\\\\1/g'`
-        $RELX_RIAK $ESCAPED_ARGS
+        $RELX_RIAK $*
         ;;
 esac

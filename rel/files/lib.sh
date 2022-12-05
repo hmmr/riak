@@ -25,6 +25,12 @@ rpc() {
     fi
 }
 
+rpc_raw() {
+    local mod=$1
+    local fun=$2
+    "${PLATFORM_BIN_DIR}/riak" rpc $mod $fun "$3"
+}
+
 ## Example usage:
 #
 # #!/bin/sh

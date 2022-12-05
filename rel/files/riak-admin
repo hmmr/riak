@@ -546,6 +546,10 @@ The following commands modify users and security ACLs for Riak:
     esac
 }
 
+escape() {
+    echo -n "$1" | sed 's/"/\\"/g'
+}
+
 btype_admin()
 {
     case "$1" in
@@ -556,6 +560,7 @@ btype_admin()
             fi
             rpc riak_kv_console bucket_type_status "$2"
             ;;
+
         activate)
             if [ $# -ne 2 ]; then
                 echo "Usage: $SCRIPT bucket-type activate <type>"
@@ -563,47 +568,23 @@ btype_admin()
             fi
             rpc riak_kv_console bucket_type_activate "$2"
             ;;
+
         create)
             if [ $# -lt 2 ]; then
                 echo "Usage: $SCRIPT bucket-type create <type> ['{\"props\": { ... }}']"
                 exit 1
             fi
-
-            # Allow for both command line styles (quoted 3rd param) or $@ parameters
-            #     bucket-type create <type> '{"props": { ... }}'"
-            #     bucket-type create <type> {"props": { ... }}"
-            #
-            if [ $# -le 3 ]; then
-                json=`echo ${3:-}|tr -d " "`
-                rpc riak_kv_console bucket_type_create "$2" "$json"
-            else  # greater than 3 parameters
-                two=$2
-                shift 2
-                three=`echo $@|tr -d " "`
-                rpc riak_kv_console bucket_type_create "$two" "$three"
-            fi
-
+            rpc_raw riak_kv_console bucket_type_create "[[\"$2\", \"`escape "$3"`\"]]"
             ;;
+
         update)
             if [ $# -lt 3 ]; then
                 echo "Usage: $SCRIPT bucket-type update <type> '{\"props\": { ... }}'"
                 exit 1
             fi
-
-            # Allow for both command line styles (quoted 3rd param) or $@ parameters
-            #     bucket-type update <type> '{"props": { ... }}'"
-            #     bucket-type update <type> {"props": { ... }}"
-            #
-            if [ $# -eq 3 ]; then
-                json=`echo $3|tr -d " "`
-                rpc riak_kv_console bucket_type_update "$2" "$json"
-            else  # greater than 3 parameters
-                two=$2
-                shift 2
-                three=`echo $@|tr -d " "`
-                rpc riak_kv_console bucket_type_update "$two" "$three"
-            fi
+            rpc_raw riak_kv_console bucket_type_update "[[\"$2\", \"`escape "$3"`\"]]"
             ;;
+
         list)
             if [ $# -ne 1 ]; then
                 echo "Usage: $SCRIPT bucket-type list"

@@ -27,7 +27,7 @@ all: compile
 
 compile:
 	$(REBAR) get-deps
-	ls patches/*.patch | xargs cat | git apply
+	ls patches/*.patch | xargs cat | GIT_WORK_TREE=. git apply -v --unsafe-paths
 	$(REBAR) compile
 
 clean: testclean

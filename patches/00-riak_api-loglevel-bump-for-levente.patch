@@ -1,0 +1,67 @@
+diff --git a/src/riak_api_pb_server.erl b/src/riak_api_pb_server.erl
+index fd48008..f07e80b 100644
+--- a/_build/default/lib/riak_api/src/riak_api_pb_server.erl
++++ b/_build/default/lib/riak_api/src/riak_api_pb_server.erl
+@@ -110,7 +110,7 @@ wait_for_socket({set_socket, Socket}, _From, State=#state{transport={_Transport,
+                                                        peername=PeerInfo}}
+             end;
+         {error, Reason} ->
+-            lager:debug("Could not get PB socket peername: ~p", [Reason]),
++            lager:warning("Could not get PB socket peername: ~p", [Reason]),
+             %% It's not really "ok", but there's no reason for the
+             %% listener to crash just because this socket had an
+             %% error. See riak_api#54.
+@@ -135,7 +135,7 @@ wait_for_tls({msg, MsgCode, _MsgData}, State=#state{socket=Socket,
+                         {error, _Reason} ->
+                             undefined
+                     end,
+-                    lager:debug("STARTTLS succeeded, peer's common name was ~p",
++                    lager:info("STARTTLS succeeded, peer's common name was ~p",
+                                [CommonName]),
+                     {next_state, wait_for_auth,
+                      State#state{socket=NewSocket, common_name=CommonName, transport={ssl,ssl}}};
+@@ -145,7 +145,7 @@ wait_for_tls({msg, MsgCode, _MsgData}, State=#state{socket=Socket,
+                     {stop, {error, {startls_failed, Reason}}, State}
+             end;
+         _ ->
+-            lager:debug("Client sent unexpected message code ~p", [MsgCode]),
++            lager:warning("Client sent unexpected message code ~p", [MsgCode]),
+             State1 = send_error_and_flush("Security is enabled, please STARTTLS first",
+                                  State),
+             {next_state, wait_for_tls, State1}
+@@ -170,7 +170,7 @@ wait_for_auth({msg, MsgCode, MsgData}, State=#state{socket=Socket,
+                                                                   {common_name,
+                                                                    State#state.common_name}]) of
+                 {ok, SecurityContext} ->
+-                    lager:debug("authentication for ~p from ~p succeeded",
++                    lager:info("authentication for ~p from ~p succeeded",
+                                [User, PeerIP]),
+                     AuthResp = riak_pb_codec:msg_code(rpbauthresp),
+                     Transport:send(Socket, <<1:32/unsigned-big, AuthResp:8>>),
+@@ -183,7 +183,7 @@ wait_for_auth({msg, MsgCode, MsgData}, State=#state{socket=Socket,
+                     timer:sleep(5000),
+                     State1 = send_error_and_flush("Authentication failed",
+                                                   State),
+-                    lager:debug("authentication for ~p from ~p failed: ~p",
++                    lager:warning("authentication for ~p from ~p failed: ~p",
+                                [User, PeerIP, Reason]),
+                     case State#state.retries of
+                         N when N =< 1 ->
+@@ -306,7 +306,7 @@ handle_info({Proto, Socket, _Data}, _SN, State=#state{socket=Socket}) when
+         Proto == tcp; Proto == ssl ->
+     %% req =/= undefined: received a new request while another was in
+     %% progress -> Error
+-    lager:debug("Received a new PB socket request"
++    lager:error("Received a new PB socket request"
+                 " while another was in progress"),
+     State1 = send_error_and_flush("Cannot send another request while one is in progress", State),
+     {stop, normal, State1};
+@@ -368,7 +368,7 @@ decode_buffer(StateName, State=#state{socket=Socket,
+                     Stop
+             end;
+         {ok, Binary, Rest} ->
+-            lager:error("Unexpected message format! Message: ~p, Rest: ~p", [Binary, Rest]),
++            lager:warning("Unexpected message format! Message: ~p, Rest: ~p", [Binary, Rest]),
+             {stop, badmessage, State};
+         {more, _Length} ->
+             Control:setopts(Socket, [{active, once}]),

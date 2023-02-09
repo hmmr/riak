@@ -97,6 +97,9 @@ $(BUILD_STAGE_DIR): buildrel
 #  * copy the vars.config over for build config
 buildrel:
 	tar -xf $(BASE_DIR)/rel/pkg/out/$(PKG_ID).tar.gz -C $(BASE_DIR)/rel/pkg/out/$(PKG_ID)
+	cd $(BASE_DIR)/rel/pkg/out/$(PKG_ID); \
+	(mkdir -p _build/default/lib && cd _build/default/lib && for d in $(BASE_DIR)/_build/default/lib/*; do ln -fs $$d; done; \
+	  rm eleveldb)
 	$(MAKE) -C $(BASE_DIR)/rel/pkg/out/$(PKG_ID) rel-fbsdng
 	rm -rf rel/riak/lib/*/c_src rel/riak/lib/*/src
 	chmod 0755 rel/riak/bin/* rel/riak/erts-*/bin/*

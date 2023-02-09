@@ -4,7 +4,7 @@ PKG_REVISION    ?= $(shell git describe --tags 2>/dev/null)
 PKG_BUILD        = 1
 BASE_DIR         = $(shell pwd)
 ERLANG_BIN       = $(shell dirname $(shell which erl 2>/dev/null) 2>/dev/null)
-OTP_VER          = $(shell echo $(ERLANG_BIN) | rev | cut -d "/" -f 2 | rev)
+OTP_VER          = $(shell erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().' -noshell)
 REBAR           ?= $(BASE_DIR)/rebar3
 OVERLAY_VARS    ?=
 TEST_IGNORE     ?= lager riak basho_bench
@@ -84,6 +84,10 @@ rel-rpm: compile
 rel-deb: compile
 	$(REBAR) as deb release
 	cp -a _build/deb/rel/riak rel/
+
+rel-fbsdng: compile
+	@$(REBAR) as fbsdng release
+	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/fbsdng/rel riak && tar -x -f rel.tar -C rel && rm rel.tar
 
 relclean:
 	rm -rf $(REL_DIR)
@@ -231,7 +235,7 @@ PKG_ID := "$(REPO_TAG)-OTP$(OTP_VER)"
 PKG_VERSION = $(shell echo $(PKG_ID) | sed -e 's/^$(REPO)-//')
 
 package:
-	mkdir rel/pkg/out/riak-$(PKG_ID)
+	mkdir rel/pkg/out/$(PKG_ID)
 	git archive --format=tar HEAD | gzip >rel/pkg/out/$(PKG_ID).tar.gz
 	$(MAKE) -f rel/pkg/Makefile
 

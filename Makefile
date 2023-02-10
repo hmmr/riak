@@ -89,6 +89,12 @@ rel-deb: compile
 	$(REBAR) as deb release
 	cp -a _build/deb/rel/riak rel/
 
+# this one is to be called from an external make (not from rel/pkg/Makefile)
+rel-alpine: compile
+	@$(REBAR) as alpine release
+	@(cd _build/alpine/rel/riak/usr/bin && mv riak-nosu riak)
+	@tar --exclude-vcs -c -C _build/alpine/rel riak | tar -x -C rel
+
 rel-fbsdng: compile
 	@$(REBAR) as fbsdng release
 	@tar  -c -f rel.tar --exclude '*/.git/*' -C _build/fbsdng/rel riak && tar -x -f rel.tar -C rel && rm rel.tar

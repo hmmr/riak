@@ -2,19 +2,38 @@
 # -*- tab-width:4;indent-tabs-mode:nil -*-
 # ex: ts=4 sw=4 et
 
-# Keep track of where script was invoked
-ORIGINAL_DIR=$(pwd)
+PLATFORM_BASE_DIR={{platform_base_dir}}
+PLATFORM_BASE_DIR=${PLATFORM_BASE_DIR:-$(cd $(dirname "$0")/.. && pwd -P)}
 
-# Make sure CWD is set to runner run dir
-cd $RUNNER_BASE_DIR
+PLATFORM_BIN_DIR={{platform_bin_dir}}
+if [ "$PLATFORM_BIN_DIR" = "${PLATFORM_BIN_DIR#/}" ]; then
+    PLATFORM_BIN_DIR=$PLATFORM_BASE_DIR/$PLATFORM_BIN_DIR
+fi
 
-# Identify the script name
-SCRIPT="riak-admin"
+PLATFORM_LIB_DIR={{platform_lib_dir}}
+if [ "$PLATFORM_LIB_DIR" = "${PLATFORM_LIB_DIR#/}" ]; then
+    PLATFORM_LIB_DIR=$PLATFORM_BASE_DIR/$PLATFORM_LIB_DIR
+fi
+. $PLATFORM_LIB_DIR/lib.sh
 
-# Setup required due to relx not node-package
-ERTS_PATH=$BINDIR
-NAME_PARAM="-name"
-BOOT_FILE="start_clean"
+PLATFORM_ETC_DIR={{platform_etc_dir}}
+if [ "$PLATFORM_ETC_DIR" = "${PLATFORM_ETC_DIR#/}" ]; then
+    PLATFORM_ETC_DIR=$PLATFORM_BASE_DIR/$PLATFORM_ETC_DIR
+fi
+
+PLATFORM_PATCH_DIR={{platform_patch_dir}}
+if [ "$PLATFORM_PATCH_DIR" = "${PLATFORM_PATCH_DIR#/}" ]; then
+    PLATFORM_PATCH_DIR=$PLATFORM_BASE_DIR/$PLATFORM_PATCH_DIR
+fi
+
+ERTS_VER=$(cd ${PLATFORM_BASE_DIR} && ls -d erts-*)
+ERTS_PATH="${PLATFORM_BASE_DIR}/$ERTS_VER/bin"
+COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
+
+NODE=`egrep '^[ \t]*nodename[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
+HOST=${NODE#*@}
+
+BOOT_FILE="${PLATFORM_BASE_DIR}/releases/{{release_version}}/start_clean"
 
 # Function to validate the node is down
 node_down_check() {

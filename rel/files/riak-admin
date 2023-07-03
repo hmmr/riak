@@ -1069,7 +1069,6 @@ case "$1" in
                        -node $NODE \
                        $* -tracing off
         ;;
-        ;;
     cluster)
         shift
         cluster_admin "$@"

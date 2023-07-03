@@ -1023,21 +1023,17 @@ case "$1" in
         ;;
 
     test)
-        # Make sure the local node IS running
-
         shift
 
-        # Parse out the node name to pass to the client
-        NODE_NAME=${NAME_ARG#* }
-
-        $ERTS_PATH/erl -noshell $NAME_PARAM riak_test$NAME_HOST $COOKIE_ARG \
-                       -pa $RUNNER_LIB_DIR/basho-patches \
+        $ERTS_PATH/erl -noshell -name riak_test@$HOST -setcookie $COOKIE \
+                       -pa {{platform_patch_dir}} \
                        -boot $BOOT_FILE \
-                       -eval "case catch(riak:client_test(\"$NODE_NAME\")) of \
-                               ok -> init:stop();                             \
-                               _  -> init:stop(1)                             \
+                       -eval "lists:foreach(fun code:add_path/1, filelib:wildcard(\"lib/*/ebin\")),
+                              case catch(riak:client_test(\"$NODE\")) of
+                               ok -> init:stop();
+                               _  -> init:stop(1)
                               end."
-
+        
         ;;
     diag)
         case "$2" in
@@ -1064,15 +1060,15 @@ case "$1" in
         shift
 
         RAND=$(($(($$ % 1000)) + 1))
-        NODE_NAME=${NAME_ARG#* }
         # Using np_etop instead of riak_etop to follow node_package convention
         $ERTS_PATH/erl -noshell -noinput \
-            -pa $RUNNER_LIB_DIR/basho-patches \
-            -boot $BOOT_FILE \
-            -hidden $NAME_PARAM np_etop$RAND$NAME_HOST $COOKIE_ARG \
-            -s etop -s erlang halt -output text \
-            -node $NODE_NAME \
-            $* -tracing off
+                       -pa {{platform_patch_dir}} \
+                       -boot $BOOT_FILE \
+                       -hidden -name np_etop$RAND@$HOST -setcookie $COOKIE \
+                       -s etop -s erlang halt -output text \
+                       -node $NODE \
+                       $* -tracing off
+        ;;
         ;;
     cluster)
         shift

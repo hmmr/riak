@@ -15,8 +15,8 @@ RUNNER_GEN_DIR={{platform_gen_dir}}
 RUNNER_ETC_DIR=$PLATFORM_ETC_DIR
 
 ERTS_VER=$(cd ${PLATFORM_BASE_DIR} && ls -d erts-*)
-ERTS_PATH="${PLATFORM_BASE_DIR}/$ERTS_VER/bin"
-ERTS_DIR=$ERTS_PATH/..
+ERTS_DIR="${PLATFORM_BASE_DIR}/$ERTS_VER"
+
 COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
 
 NODE=`egrep '^[ \t]*nodename[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`

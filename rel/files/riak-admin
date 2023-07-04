@@ -60,23 +60,23 @@ stat_admin()
     case "$1" in
         show)
             shift
-            rpc riak_core_console stat_show "$*"
+            relx_nodetool rpc riak_core_console stat_show "$*"
             ;;
        info)
             shift
-            rpc riak_core_console stat_info "$*"
+            relx_nodetool rpc riak_core_console stat_info "$*"
             ;;
         enable)
             shift
-            rpc riak_core_console stat_enable "$*"
+            relx_nodetool rpc riak_core_console stat_enable "$*"
             ;;
         disable)
             shift
-            rpc riak_core_console stat_disable "$*"
+            relx_nodetool rpc riak_core_console stat_disable "$*"
             ;;
         reset)
             shift
-            rpc riak_core_console stat_reset "$*"
+            relx_nodetool rpc riak_core_console stat_reset "$*"
             ;;
         help)
             shift
@@ -262,13 +262,13 @@ cluster_admin()
                 echo "Usage: $SCRIPT cluster join <node>"
                 exit 1
             fi
-            rpc riak_kv_console staged_join "$2"
+            relx_nodetool rpc riak_kv_console staged_join "$2"
             ;;
         leave)
             if [ $# -eq 1 ]; then
-                rpc riak_core_console stage_leave
+                relx_nodetool rpc riak_core_console stage_leave
             elif [ $# -eq 2 ]; then
-                rpc riak_core_console stage_leave "$2"
+                relx_nodetool rpc riak_core_console stage_leave "$2"
             else
                 echo "Usage: $SCRIPT cluster leave [<node>]"
                 exit 1
@@ -279,21 +279,21 @@ cluster_admin()
                 echo "Usage: $SCRIPT cluster force-remove <node>"
                 exit 1
             fi
-            rpc riak_core_console stage_remove "$2"
+            relx_nodetool rpc riak_core_console stage_remove "$2"
             ;;
         replace)
             if [ $# -ne 3 ]; then
                 echo "Usage: $SCRIPT cluster replace <node1> <node2>"
                 exit 1
             fi
-            rpc riak_core_console stage_replace "$2" "$3"
+            relx_nodetool rpc riak_core_console stage_replace "$2" "$3"
             ;;
         force-replace)
             if [ $# -ne 3 ]; then
                 echo "Usage: $SCRIPT cluster force-replace <node1> <node2>"
                 exit 1
             fi
-            rpc riak_core_console stage_force_replace "$2" "$3"
+            relx_nodetool rpc riak_core_console stage_force_replace "$2" "$3"
             ;;
         resize-ring)
             if [ $# -ne 2 ]; then
@@ -301,34 +301,34 @@ cluster_admin()
                 echo "       $SCRIPT cluster resize-ring abort"
                 exit 1
             fi
-            rpc riak_core_console stage_resize_ring "$2"
+            relx_nodetool rpc riak_core_console stage_resize_ring "$2"
             ;;
         plan)
-            rpc riak_core_console print_staged
+            relx_nodetool rpc riak_core_console print_staged
             ;;
         commit)
-            rpc riak_core_console commit_staged
+            relx_nodetool rpc riak_core_console commit_staged
             ;;
         clear)
-            rpc riak_core_console clear_staged
+            relx_nodetool rpc riak_core_console clear_staged
             ;;
         status)
-            rpc riak_core_console command $SCRIPT cluster $@
+            relx_nodetool rpc riak_core_console command riak-admin cluster $@
             ;;
         partitions|partition)
-            rpc riak_core_console command $SCRIPT cluster $@
+            relx_nodetool rpc riak_core_console command riak-admin cluster $@
             ;;
         partition[_-]count)
             shift
-            rpc riak_core_console command $SCRIPT cluster partition-count $@
+            relx_nodetool rpc riak_core_console command riak-admin cluster partition-count $@
             ;;
         location)
             shift
-            rpc riak_core_console command $SCRIPT cluster location $@
+            relx_nodetool rpc riak_core_console command riak-admin cluster location $@
             ;;
         *)
             echo "\
-Usage: $SCRIPT cluster <command>
+Usage: riak-admin cluster <command>
 
 The following commands stage changes to cluster membership. These commands
 do not take effect immediately. After staging a set of changes, the staged
@@ -384,146 +384,146 @@ security_admin()
         add-user)
             shift
             if [ $# -lt 1 ]; then
-                echo "Usage: $SCRIPT security add-user <user> [<option>=<value> [...]]"
+                echo "Usage: riak-admin security add-user <user> [<option>=<value> [...]]"
                 exit 1
             fi
-            rpc riak_core_console add_user "$@"
+            relx_nodetool rpc riak_core_console add_user "$@"
             if [ $? -eq 0 ]; then
-                rpc riak_core_console print_user "$1"
+                relx_nodetool rpc riak_core_console print_user "$1"
             fi
             ;;
         add-group)
             shift
             if [ $# -lt 1 ]; then
-                echo "Usage: $SCRIPT security add-group <group> [<option>=<value> [...]]"
+                echo "Usage: riak-admin security add-group <group> [<option>=<value> [...]]"
                 exit 1
             fi
-            rpc riak_core_console add_group "$@"
+            relx_nodetool rpc riak_core_console add_group "$@"
             if [ $? -eq 0 ]; then
-                rpc riak_core_console print_group "$1"
+                relx_nodetool rpc riak_core_console print_group "$1"
             fi
             ;;
         alter-user)
             shift
             if [ $# -lt 2 ]; then
-                echo "Usage: $SCRIPT security alter-user <user> <option> [<option>=<value> [...]]"
+                echo "Usage: riak-admin security alter-user <user> <option> [<option>=<value> [...]]"
                 exit 1
             fi
-            rpc riak_core_console alter_user "$@"
+            relx_nodetool rpc riak_core_console alter_user "$@"
             if [ $? -eq 0 ]; then
-                rpc riak_core_console print_user "$1"
+                relx_nodetool rpc riak_core_console print_user "$1"
             fi
             ;;
         alter-group)
             shift
             if [ $# -lt 2 ]; then
-                echo "Usage: $SCRIPT security alter-group <group> <option> [<option>=<value> [...]]"
+                echo "Usage: riak-admin security alter-group <group> <option> [<option>=<value> [...]]"
                 exit 1
             fi
-            rpc riak_core_console alter_group "$@"
+            relx_nodetool rpc riak_core_console alter_group "$@"
             if [ $? -eq 0 ]; then
-                rpc riak_core_console print_group "$1"
+                relx_nodetool rpc riak_core_console print_group "$1"
             fi
             ;;
         del-user)
             shift
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT security del-user <user>"
+                echo "Usage: riak-admin security del-user <user>"
                 exit 1
             fi
-            rpc riak_core_console del_user "$@"
+            relx_nodetool rpc riak_core_console del_user "$@"
             ;;
         del-group)
             shift
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT security del-group <user>"
+                echo "Usage: riak-admin security del-group <user>"
                 exit 1
             fi
-            rpc riak_core_console del_group "$@"
+            relx_nodetool rpc riak_core_console del_group "$@"
             ;;
         add-source)
             shift
             if [ $# -lt 3 ]; then
-                echo "Usage: $SCRIPT security add-source all|<users> <CIDR> <source> [<option>=<value> [...]]"
+                echo "Usage: riak-admin security add-source all|<users> <CIDR> <source> [<option>=<value> [...]]"
                 exit 1
             fi
-            rpc riak_core_console add_source "$@"
+            relx_nodetool rpc riak_core_console add_source "$@"
             ;;
         del-source)
             shift
             if [ $# -ne 2 ]; then
-                echo "Usage: $SCRIPT security del-source all|<users> <CIDR>"
+                echo "Usage: riak-admin security del-source all|<users> <CIDR>"
                 exit 1
             fi
-            rpc riak_core_console del_source "$@"
+            relx_nodetool rpc riak_core_console del_source "$@"
             ;;
         grant)
             shift
             if [ $# -lt 5 ]; then
-                echo "Usage: $SCRIPT security grant <permissions> on any|<type> [bucket] to <users>"
+                echo "Usage: riak-admin security grant <permissions> on any|<type> [bucket] to <users>"
                 exit 1
             fi
-            rpc riak_core_console grant "$@"
+            relx_nodetool rpc riak_core_console grant "$@"
             ;;
         revoke)
             shift
             if [ $# -lt 5 ]; then
-                echo "Usage: $SCRIPT security revoke <permissions> on any|<type> [bucket] from <users>"
+                echo "Usage: riak-admin security revoke <permissions> on any|<type> [bucket] from <users>"
                 exit 1
             fi
-            rpc riak_core_console revoke "$@"
+            relx_nodetool rpc riak_core_console revoke "$@"
             ;;
         print-users)
-            rpc riak_core_console print_users
+            relx_nodetool rpc riak_core_console print_users
             ;;
         print-groups)
-            rpc riak_core_console print_groups
+            relx_nodetool rpc riak_core_console print_groups
             ;;
         print-sources)
-            rpc riak_core_console print_sources
+            relx_nodetool rpc riak_core_console print_sources
             ;;
         enable)
-            rpc riak_core_console security_enable
-            rpc riak_core_console security_status
+            relx_nodetool rpc riak_core_console security_enable
+            relx_nodetool rpc riak_core_console security_status
             ;;
         disable)
-            rpc riak_core_console security_disable
-            rpc riak_core_console security_status
+            relx_nodetool rpc riak_core_console security_disable
+            relx_nodetool rpc riak_core_console security_status
             ;;
         status)
-            rpc riak_core_console security_status
+            relx_nodetool rpc riak_core_console security_status
             ;;
         print-grants)
             shift
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT security print-grants <user>"
+                echo "Usage: riak-admin security print-grants <user>"
                 exit 1
             fi
-            rpc riak_core_console print_grants "$@"
+            relx_nodetool rpc riak_core_console print_grants "$@"
             ;;
         print-user)
             shift
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT security print-user <user>"
+                echo "Usage: riak-admin security print-user <user>"
                 exit 1
             fi
-            rpc riak_core_console print_user "$@"
+            relx_nodetool rpc riak_core_console print_user "$@"
             ;;
         print-group)
             shift
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT security print-group <group>"
+                echo "Usage: riak-admin security print-group <group>"
                 exit 1
             fi
-            rpc riak_core_console print_group "$@"
+            relx_nodetool rpc riak_core_console print_group "$@"
             ;;
         ciphers)
             shift
-            rpc riak_core_console ciphers "$@"
+            relx_nodetool rpc riak_core_console ciphers "$@"
             ;;
         *)
             echo "\
-Usage: $SCRIPT security <command>
+Usage: riak-admin security <command>
 
 The following commands modify users and security ACLs for Riak:
 
@@ -556,29 +556,29 @@ search_admin()
     case "$1" in
         aae[_-]status)
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT search $1"
+                echo "Usage: riak-admin search $1"
                 exit 1
             fi
             shift
 
             # Make sure the local node is running
 
-            rpc yz_console aae_status "$@"
+            relx_nodetool rpc yz_console aae_status "$@"
             ;;
         switch[_-]to[_-]new[_-]search)
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT search $1"
+                echo "Usage: riak-admin search $1"
                 exit 1
             fi
             shift
 
             # Make sure the local node is running
 
-            rpc yz_console switch_to_new_search "$@"
+            relx_nodetool rpc yz_console switch_to_new_search "$@"
             ;;
         *)
 echo "\
-Usage: $SCRIPT search <command>
+Usage: riak-admin search <command>
 
 Available commands:
 
@@ -593,21 +593,21 @@ btype_admin()
     case "$1" in
         status)
             if [ $# -ne 2 ]; then
-                echo "Usage: $SCRIPT bucket-type status <type>";
+                echo "Usage: riak-admin bucket-type status <type>";
                 exit 1
             fi
-            rpc riak_kv_console bucket_type_status "$2"
+            relx_nodetool rpc riak_kv_console bucket_type_status "$2"
             ;;
         activate)
             if [ $# -ne 2 ]; then
-                echo "Usage: $SCRIPT bucket-type activate <type>"
+                echo "Usage: riak-admin bucket-type activate <type>"
                 exit 1
             fi
-            rpc riak_kv_console bucket_type_activate "$2"
+            relx_nodetool rpc riak_kv_console bucket_type_activate "$2"
             ;;
         create)
             if [ $# -lt 2 ]; then
-                echo "Usage: $SCRIPT bucket-type create <type> ['{\"props\": { ... }}']"
+                echo "Usage: riak-admin bucket-type create <type> ['{\"props\": { ... }}']"
                 exit 1
             fi
 
@@ -617,18 +617,18 @@ btype_admin()
             #
             if [ $# -le 3 ]; then
                 json=`echo ${3:-}|tr -d " "`
-                rpc riak_kv_console bucket_type_create "$2" "$json"
+                relx_nodetool rpc riak_kv_console bucket_type_create "$2" "$json"
             else  # greater than 3 parameters
                 two=$2
                 shift 2
                 three=`echo $@|tr -d " "`
-                rpc riak_kv_console bucket_type_create "$two" "$three"
+                relx_nodetool rpc riak_kv_console bucket_type_create "$two" "$three"
             fi
 
             ;;
         update)
             if [ $# -lt 3 ]; then
-                echo "Usage: $SCRIPT bucket-type update <type> '{\"props\": { ... }}'"
+                echo "Usage: riak-admin bucket-type update <type> '{\"props\": { ... }}'"
                 exit 1
             fi
 
@@ -638,24 +638,24 @@ btype_admin()
             #
             if [ $# -eq 3 ]; then
                 json=`echo $3|tr -d " "`
-                rpc riak_kv_console bucket_type_update "$2" "$json"
+                relx_nodetool rpc riak_kv_console bucket_type_update "$2" "$json"
             else  # greater than 3 parameters
                 two=$2
                 shift 2
                 three=`echo $@|tr -d " "`
-                rpc riak_kv_console bucket_type_update "$two" "$three"
+                relx_nodetool rpc riak_kv_console bucket_type_update "$two" "$three"
             fi
             ;;
         list)
             if [ $# -ne 1 ]; then
-                echo "Usage: $SCRIPT bucket-type list"
+                echo "Usage: riak-admin bucket-type list"
                 exit 1
             fi
-            rpc riak_kv_console bucket_type_list
+            relx_nodetool rpc riak_kv_console bucket_type_list
             ;;
         *)
             echo "\
-Usage: $SCRIPT bucket-type <command>
+Usage: riak-admin bucket-type <command>
 
 The follow commands can be used to manage bucket types for the cluster:
 
@@ -673,37 +673,37 @@ case "$1" in
     join)
         if [ "$2" != "-f" ]; then
             echo "The 'join' command has been deprecated in favor of the new "
-            echo "clustering commands provided by '$SCRIPT cluster'. To continue "
+            echo "clustering commands provided by 'riak-admin cluster'. To continue "
             echo "using the deprecated 'join' command, use 'join -f'"
             exit 1
         fi
 
         if [ $# -ne 3 ]; then
-            echo "Usage: $SCRIPT join -f <node>"
+            echo "Usage: riak-admin join -f <node>"
             exit 1
         fi
 
         # Make sure the local node IS running
 
-        rpc riak_kv_console join "$3"
+        relx_nodetool rpc riak_kv_console join "$3"
         ;;
 
     leave)
         if [ "$2" != "-f" ]; then
             echo "The 'leave' command has been deprecated in favor of the new "
-            echo "clustering commands provided by '$SCRIPT cluster'. To continue "
+            echo "clustering commands provided by 'riak-admin cluster'. To continue "
             echo "using the deprecated 'leave' command, use 'leave -f'"
             exit 1
         fi
 
         if [ $# -ne 2 ]; then
-            echo "Usage: $SCRIPT leave -f"
+            echo "Usage: riak-admin leave -f"
             exit 1
         fi
 
         # Make sure the local node is running
 
-        rpc riak_kv_console leave
+        relx_nodetool rpc riak_kv_console leave
         ;;
 
     remove)
@@ -720,127 +720,127 @@ case "$1" in
     force[_-]remove)
         if [ "$2" != "-f" ]; then
             echo "The 'force-remove' command has been deprecated in favor of the new "
-            echo "clustering commands provided by '$SCRIPT cluster'. To continue "
+            echo "clustering commands provided by 'riak-admin cluster'. To continue "
             echo "using the deprecated 'force-remove' command, use 'force-remove -f'"
             exit 1
         fi
 
         if [ $# -ne 3 ]; then
-            echo "Usage: $SCRIPT force-remove -f <node>"
+            echo "Usage: riak-admin force-remove -f <node>"
             exit 1
         fi
 
         # Make sure the local node is running
 
-        rpc riak_kv_console remove "$3"
+        relx_nodetool rpc riak_kv_console remove "$3"
         ;;
 
     down)
         if [ $# -ne 2 ]; then
-            echo "Usage: $SCRIPT down <node>"
+            echo "Usage: riak-admin down <node>"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console down "$@"
+        relx_nodetool rpc riak_kv_console down "$@"
         ;;
 
     status)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT status"
+            echo "Usage: riak-admin status"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console status "$@"
+        relx_nodetool rpc riak_kv_console status "$@"
         ;;
 
     vnode[_-]status)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT $1"
+            echo "Usage: riak-admin $1"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console vnode_status "$@"
+        relx_nodetool rpc riak_kv_console vnode_status "$@"
         ;;
 
     ringready)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT ringready"
+            echo "Usage: riak-admin ringready"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console ringready "$@"
+        relx_nodetool rpc riak_kv_console ringready "$@"
         ;;
 
     transfers)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT transfers"
+            echo "Usage: riak-admin transfers"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_core_console transfers "$@"
+        relx_nodetool rpc riak_core_console transfers "$@"
         ;;
 
     member[_-]status)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT $1"
+            echo "Usage: riak-admin $1"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_core_console member_status "$@"
+        relx_nodetool rpc riak_core_console member_status "$@"
         ;;
 
     ring[_-]status)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT $1"
+            echo "Usage: riak-admin $1"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_core_console ring_status "$@"
+        relx_nodetool rpc riak_core_console ring_status "$@"
         ;;
 
     aae[_-]status)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT $1"
+            echo "Usage: riak-admin $1"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console aae_status "$@"
+        relx_nodetool rpc riak_kv_console aae_status "$@"
         ;;
 
     ensemble[_-]status)
         if [ $# -ne 1 ] && [ $# -ne 2 ]; then
-            echo "Usage: $SCRIPT $1 [<ensemble>]"
+            echo "Usage: riak-admin $1 [<ensemble>]"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console ensemble_status "$@"
+        relx_nodetool rpc riak_kv_console ensemble_status "$@"
         ;;
 
     repair[_-]2i)
@@ -848,43 +848,43 @@ case "$1" in
 
         # Make sure the local node is running
 
-        rpc riak_kv_console repair_2i "$@"
+        relx_nodetool rpc riak_kv_console repair_2i "$@"
         ;;
 
     cluster[_-]info)
         if [ $# -lt 2 ]; then
-            echo "Usage: $SCRIPT $1 <output_file> ['local' | <node> ['local' | <node>] [...]]"
+            echo "Usage: riak-admin $1 <output_file> ['local' | <node> ['local' | <node>] [...]]"
             exit 1
         fi
         shift
 
         # Make sure the local node is running
 
-        rpc riak_kv_console cluster_info "$@"
+        relx_nodetool rpc riak_kv_console cluster_info "$@"
         ;;
 
     services)
         if [ $# -ne 1 ]; then
-            echo "Usage: $SCRIPT $1"
+            echo "Usage: riak-admin $1"
             echo ""
             echo "Lists the services available on the node. See also: wait-for-service"
             exit 1
         fi
-        rpcterms riak_core_node_watcher services ''
+        relx_nodetool rpcterms riak_core_node_watcher services ''
         ;;
 
     wait[_-]for[_-]service)
         SVC=$2
         TARGETNODE=$3
         if [ $# -lt 2 ]; then
-            echo "Usage: $SCRIPT $1 <service_name> [<target_node>]"
+            echo "Usage: riak-admin $1 <service_name> [<target_node>]"
             exit 1
         fi
 
         while (true); do
             # Make sure riak_core_node_watcher is up and running locally before trying to query it
             # to avoid ugly (but harmless) error messages
-            NODEWATCHER=`rpcterms erlang whereis "'riak_core_node_watcher'."`
+            NODEWATCHER=`relx_nodetool rpcterms erlang whereis "'riak_core_node_watcher'."`
             if [ "$NODEWATCHER" = "undefined" ]; then
                 echo "$SVC is not up: node watcher is not running"
                 continue
@@ -893,9 +893,9 @@ case "$1" in
             # Get the list of services that are available on the requested node
             # If no node is specified, get the list of services from the local node
             if [ "X$TARGETNODE" = "X" ]; then
-                SERVICES=`rpcterms riak_core_node_watcher services ''`
+                SERVICES=`relx_nodetool rpcterms riak_core_node_watcher services ''`
             else
-                SERVICES=`rpcterms riak_core_node_watcher services "'${TARGETNODE}'."`
+                SERVICES=`relx_nodetool rpcterms riak_core_node_watcher services "'${TARGETNODE}'."`
             fi
             echo "$SERVICES" | grep "[[,]$SVC[],]" > /dev/null 2>&1
             if [ "X$?" = "X0" ]; then
@@ -912,14 +912,14 @@ case "$1" in
         # Reload user Erlang code
         # Make sure the local node is running
 
-        rpc riak_kv_console reload_code
+        relx_nodetool rpc riak_kv_console reload_code
         ;;
 
     reip)
         ACTION=$1
         shift
         if [ $# -lt 2 ]; then
-            echo "Usage $SCRIPT $ACTION <old_nodename> <new_nodename>"
+            echo "Usage riak-admin $ACTION <old_nodename> <new_nodename>"
             exit 1
         fi
 
@@ -930,7 +930,7 @@ case "$1" in
         NEWNODE=$2
 
         echo ""
-        echo "Usage $SCRIPT $ACTION is not currently supported in Riak 3.0"
+        echo "Usage riak-admin $ACTION is not currently supported in Riak 3.0"
         echo ""
         echo "As an alternative use reip_manual:"
         echo "riak admin reip_manual $OLDNODE $NEWNODE '/absolute_path_to/riak/data/ring' 'cluster_name'"
@@ -964,7 +964,7 @@ case "$1" in
         ACTION=$1
         shift
         if [ $# -lt 4 ]; then
-            echo "Usage $SCRIPT $ACTION <old_nodename> <new_nodename> <ring_dir> <cluster_name>"
+            echo "Usage riak-admin $ACTION <old_nodename> <new_nodename> <ring_dir> <cluster_name>"
             exit 1
         fi
 
@@ -988,7 +988,7 @@ case "$1" in
         shift
 
         if [ $# -lt 3 ]; then
-            echo "Usage: $SCRIPT $ACTION <node> <cookie> <filename>"
+            echo "Usage: riak-admin $ACTION <node> <cookie> <filename>"
             exit 1
         fi
 
@@ -1007,7 +1007,7 @@ case "$1" in
         shift
 
         if [ $# -lt 4 ]; then
-            echo "Usage: $SCRIPT $ACTION <node> <cookie> <filename> [node|all]"
+            echo "Usage: riak-admin $ACTION <node> <cookie> <filename> [node|all]"
             exit 1
         fi
 
@@ -1051,7 +1051,7 @@ case "$1" in
 
                 shift
 
-                rpc riaknostic main --etc "$RUNNER_ETC_DIR" --base "$RUNNER_BASE_DIR" "$@"
+                relx_nodetool rpc riaknostic main --etc "$RUNNER_ETC_DIR" --base "$RUNNER_BASE_DIR" "$@"
         esac
         ;;
     top)
@@ -1083,48 +1083,48 @@ case "$1" in
         ;;
     handoff)
         # New pattern for command line. Use nodetool for RPC
-        rpc riak_core_console command $SCRIPT $@
+        relx_nodetool rpc riak_core_console command riak-admin $@
         ;;
     set)
         # New pattern for command line. Use nodetool for RPC
-        rpc riak_core_console command $SCRIPT $@
+        relx_nodetool rpc riak_core_console command riak-admin $@
         ;;
     show)
         # New pattern for command line. Use nodetool for RPC
-        rpc riak_core_console command $SCRIPT $@
+        relx_nodetool rpc riak_core_console command riak-admin $@
         ;;
     describe)
         # New pattern for command line. Use nodetool for RPC
-        rpc riak_core_console command $SCRIPT $@
+        relx_nodetool rpc riak_core_console command riak-admin $@
         ;;
     transfer[_-]limit)
         if [ $# -gt 3 ]; then
-            echo "Usage: $SCRIPT $1"
-            echo "       $SCRIPT $1 <limit>"
-            echo "       $SCRIPT $1 <node> <limit>"
+            echo "Usage: riak-admin $1"
+            echo "       riak-admin $1 <limit>"
+            echo "       riak-admin $1 <node> <limit>"
             exit
         fi
         shift
-        rpc riak_core_console transfer_limit "$@"
+        relx_nodetool rpc riak_core_console transfer_limit "$@"
         ;;
     reformat[_-]indexes)
         if [ $# -gt 4 ]; then
-            echo "Usage: $SCRIPT $1"
-            echo "       $SCRIPT $1 --downgrade"
-            echo "       $SCRIPT $1 <concurrency> [--downgrade]"
-            echo "       $SCRIPT $1 <concurrency> <batch size> [--downgrade]"
+            echo "Usage: riak-admin $1"
+            echo "       riak-admin $1 --downgrade"
+            echo "       riak-admin $1 <concurrency> [--downgrade]"
+            echo "       riak-admin $1 <concurrency> <batch size> [--downgrade]"
             exit 1
         fi
         shift
-        rpc riak_kv_console reformat_indexes "$@"
+        relx_nodetool rpc riak_kv_console reformat_indexes "$@"
         ;;
     downgrade[_-]objects)
         if [ $# -lt 2 ]; then
-            echo "Usage: $SCRIPT $1 <kill-handoffs> [<concurrency>]"
+            echo "Usage: riak-admin $1 <kill-handoffs> [<concurrency>]"
             exit
         fi
         shift
-        rpc riak_kv_console reformat_objects "$@"
+        relx_nodetool rpc riak_kv_console reformat_objects "$@"
         ;;
     security)
         shift

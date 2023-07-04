@@ -1,14 +1,27 @@
 # Packaging Riak for Alpine Linux
 
-Alpine Linux is a minimalistic, Gentoo-inspired, source-based distribution.
+Alpine Linux is a minimalistic, Gentoo-inspired distribution.
 
 Packaging instructions for Alpine cannot be placed in
 rel/pkg/alpine/Makefile without bending too many rules and
 conventions.
 
-Instead, the aim is to have the APKBUILDs for
-[riak](https://gitlab.alpinelinux.org/hmmr/aports/-/commit/9a4f91c2f5336a492520c0ae774b95f088a09f96)
-(as well as for
-[erlang-22](https://gitlab.alpinelinux.org/hmmr/aports/-/commit/0f1eaabe0112f82e8e5acec6dc0fb826b2114858))
-merged into the official "community" repo. This file will be updated
-once it is done.
+Instead, TI Tokyo builds and publishes riak apk packages in its own
+repository at https://files-source.tiot.jp/alpine/v3.x. To make it available locally,
+users are encouraged to:
+
+1. Add this entry to /etc/apk/repositories:
+
+```
+http://files-source.tiot.jp/alpine/v3.xx/main
+```
+where _xx_ is the latest version of alpine linux release (currently 18).
+
+2. Download the public key from
+https://files.tiot.jp/alpine/alpine@tiot.jp.rsa.pub and add it
+to /etc/apk/keys.
+
+With this done, riak, riak-cs and riak-ts will become available via
+regular `apk add`. To install a particular version, do `apk add
+riak=3.2.0.25-r0`, where the fourth element of the version indicates
+the OTP version with which it was built.

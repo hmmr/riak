@@ -45,7 +45,7 @@
 make_app_epaths () {
     ERTS_VER=$(cd ${PLATFORM_BASE_DIR} && ls -d erts-*)
     ERTS_PATH="${PLATFORM_BASE_DIR}/$ERTS_VER/bin"
-    $ERTS_PATH/escript $riak_lib_dir/app_epath.escript "$1"
+    $ERTS_PATH/escript $PLATFORM_LIB_DIR/app_epath.escript "$1"
 }
 
 epath () {

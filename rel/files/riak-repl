@@ -2,14 +2,39 @@
 # -*- tab-width:4;indent-tabs-mode:nil -*-
 # ex: ts=4 sw=4 et
 
-# Keep track of where script was invoked
-ORIGINAL_DIR=$(pwd)
+PLATFORM_BASE_DIR={{platform_base_dir}}
+PLATFORM_BASE_DIR=${PLATFORM_BASE_DIR:-$(cd $(dirname "$0")/.. && pwd -P)}
 
-# Make sure CWD is set to runner run dir
-cd $RUNNER_BASE_DIR
+PLATFORM_BIN_DIR={{platform_bin_dir}}
+if [ "$PLATFORM_BIN_DIR" = "${PLATFORM_BIN_DIR#/}" ]; then
+    PLATFORM_BIN_DIR=$PLATFORM_BASE_DIR/$PLATFORM_BIN_DIR
+fi
 
-# Identify the script name
-SCRIPT=`basename $0`
+PLATFORM_LIB_DIR={{platform_lib_dir}}
+if [ "$PLATFORM_LIB_DIR" = "${PLATFORM_LIB_DIR#/}" ]; then
+    PLATFORM_LIB_DIR=$PLATFORM_BASE_DIR/$PLATFORM_LIB_DIR
+fi
+. $PLATFORM_LIB_DIR/lib.sh
+
+PLATFORM_ETC_DIR={{platform_etc_dir}}
+if [ "$PLATFORM_ETC_DIR" = "${PLATFORM_ETC_DIR#/}" ]; then
+    PLATFORM_ETC_DIR=$PLATFORM_BASE_DIR/$PLATFORM_ETC_DIR
+fi
+
+PLATFORM_PATCH_DIR={{platform_patch_dir}}
+if [ "$PLATFORM_PATCH_DIR" = "${PLATFORM_PATCH_DIR#/}" ]; then
+    PLATFORM_PATCH_DIR=$PLATFORM_BASE_DIR/$PLATFORM_PATCH_DIR
+fi
+
+ERTS_VER=$(cd ${PLATFORM_BASE_DIR} && ls -d erts-*)
+ERTS_PATH="${PLATFORM_BASE_DIR}/$ERTS_VER/bin"
+COOKIE=`egrep '^[ \t]*distributed_cookie[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
+
+NODE=`egrep '^[ \t]*nodename[ \t]*=[ \t]*' $PLATFORM_ETC_DIR/riak.conf 2> /dev/null | cut -d = -f 2 | tr -d ' '`
+HOST=${NODE#*@}
+
+BOOT_FILE="${PLATFORM_BASE_DIR}/releases/{{release_version}}/start_clean"
+
 
 V2REPLDEP="DEPRECATION NOTICE: The replication protocol you are currently using in this cluster has been deprecated and will be unsupported and removed some time after the Riak Enterprise 2.1 release. Please upgrade to the latest replication protocol as soon as possible. If you need assistance migrating contact Basho Client Services or follow the instructions in our documentation ( http://docs.basho.com/riakee/latest/cookbooks/Multi-Data-Center-Replication-UpgradeV2toV3/ )."
 

@@ -168,7 +168,7 @@ exit
 ###
 
 riak_base_dir=$PLATFORM_BASE_DIR
-riak_bin_dir=$PLATFORM_BIN_DIR
+riak_bin_dir={{usr_sbin_dir}}
 riak_etc_dir=$PLATFORM_ETC_DIR
 
 get_cfgs=0

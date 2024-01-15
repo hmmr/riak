@@ -65,6 +65,7 @@ EOF
 %define _build_id_links none
 
 %build
+(mkdir -p _build/default/lib && cd _build/default/lib && for d in ../../../../../../../../_build/default/lib/*; do ln -sf $d; done; ln -s ../../../../../../../../_checkouts/* .)
 make rel-rpm
 
 %install

@@ -12,7 +12,8 @@ default:
 	ln -sf $(BASE_DIR)/rel/pkg/out/$(PKG_ID).tar.gz $(BASE_DIR)/rel/pkg/out/$(TAR_VERSION).orig.tar.gz
 
 	cd $(BASE_DIR)/rel/pkg/out/$(PKG_ID); \
-	(mkdir -p _build/default && cd _build/default && for d in lib; do ln -fs $(BASE_DIR)/_build/default/$$d; done); \
+	(mkdir -p _build/default && cd _build/default && for d in lib; do ln -fs $(BASE_DIR)/_build/default/$$d; done; \
+	  ln -fs $(BASE_DIR)/_checkouts/eleveldb); \
 	dch  --create --package riak -v "$(PKG_VERSION)" \
              "Build from $(PKG_ID)";\
 	debuild --prepend-path=$(ERLANG_BIN) \

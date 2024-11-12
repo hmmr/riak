@@ -316,18 +316,18 @@ cluster_admin()
             rpc riak_core_console clear_staged
             ;;
         status)
-            rpc riak_core_console command $SCRIPT cluster "$@"
+            rpc riak_core_console command "riak-admin" cluster "$@"
             ;;
         partitions|partition)
-            rpc riak_core_console command $SCRIPT cluster "$@"
+            rpc riak_core_console command "riak-admin" cluster "$@"
             ;;
         partition[_-]count)
             shift
-            rpc riak_core_console command $SCRIPT cluster partition-count "$@"
+            rpc riak_core_console command "riak-admin" cluster partition-count "$@"
             ;;
         location)
             shift
-            rpc riak_core_console command $SCRIPT cluster location "$@"
+            rpc riak_core_console command "riak-admin" cluster location "$@"
             ;;
         *)
             echo "\
@@ -982,16 +982,16 @@ case "$1" in
         btype_admin "$@"
         ;;
     handoff)
-        rpc riak_core_console command $SCRIPT "$@"
+        rpc riak_core_console command "riak-admin" "$@"
         ;;
     set)
-        rpc riak_core_console command $SCRIPT "$@"
+        rpc riak_core_console command "riak-admin" "$@"
         ;;
     show)
-        rpc riak_core_console command $SCRIPT "$@"
+        rpc riak_core_console command "riak-admin" "$@"
         ;;
     describe)
-        rpc riak_core_console command $SCRIPT "$@"
+        rpc riak_core_console command "riak-admin" "$@"
         ;;
     transfer[_-]limit)
         if [ $# -gt 3 ]; then
